@@ -2,14 +2,6 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
-    "remate-launcher-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/remateLauncher/RemateLauncherWebPart.js",
-          "manifest": "./src/webparts/remateLauncher/RemateLauncherWebPart.manifest.json"
-        }
-      ]
-    },
     "find-the-impostor-web-part": {
       "components": [
         {
@@ -17,11 +9,19 @@
           "manifest": "./src/webparts/findTheImpostor/FindTheImpostorWebPart.manifest.json"
         }
       ]
+    },
+    "face-matcher-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/faceMatcher/FaceMatcherWebPart.js",
+          "manifest": "./src/webparts/faceMatcher/FaceMatcherWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "FindTheImpostorWebPartStrings": "lib/webparts/findTheImpostor/loc/{locale}.js",
-    "RemateLauncherWebPartStrings": "lib/webparts/remateLauncher/loc/{locale}.js"
+    "FaceMatcherWebPartStrings": "lib/webparts/faceMatcher/loc/{locale}.js"
   }
 }

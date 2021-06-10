@@ -6,7 +6,7 @@ import { MSGraphClient } from '@microsoft/sp-http';
 import { IWhoIsWhoProps } from './components/WhoIsWho/WhoIsWhoProps';
 import WhoIsWho from './components/WhoIsWho/WhoIsWho';
 
-export default class RemateLauncherWebPart extends BaseClientSideWebPart<{}> {
+export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
 
   private graphClient: MSGraphClient;
 
