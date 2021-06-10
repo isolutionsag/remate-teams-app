@@ -3,8 +3,8 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { MSGraphClient } from '@microsoft/sp-http';
-import { IWhoIsWhoProps } from './components/WhoIsWho/WhoIsWhoProps';
-import WhoIsWho from './components/WhoIsWho/WhoIsWho';
+import { IFaceMatcherProps } from './components/FaceMatcher/IFaceMatcherProps';
+import FaceMatcher from './components/FaceMatcher/FaceMatcher';
 
 export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
 
@@ -22,8 +22,8 @@ export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
   }
 
   public render(): void {
-    const element: React.ReactElement<IWhoIsWhoProps> = React.createElement(
-      WhoIsWho,
+    const element: React.ReactElement<IFaceMatcherProps> = React.createElement(
+      FaceMatcher,
       {
         graphClient: this.graphClient,
         context: this.context

@@ -1,16 +1,16 @@
 import { Icon, IconButton } from '@microsoft/office-ui-fabric-react-bundle';
 import * as React from 'react';
 import { GraphService } from 'services/GraphService';
-import IPersonProps from './IPersonProps';
-import IPersonState from './IPersonState';
-import styles from './Person.module.scss';
+import IEmployeeCardProps from './IEmployeeCardProps';
+import IEmployeeCardState from './IEmployeeCardState';
+import styles from './EmployeeCard.module.scss';
 
 
-export class Person extends React.Component<IPersonProps, IPersonState> {
+export class EmployeeCard extends React.Component<IEmployeeCardProps, IEmployeeCardState> {
   
   private service: GraphService;
 
-  constructor(props: IPersonProps) {
+  constructor(props: IEmployeeCardProps) {
     super(props);
 
     this.service = new GraphService(this.props.graphClient);
@@ -42,7 +42,7 @@ export class Person extends React.Component<IPersonProps, IPersonState> {
 
   }
 
-  public render(): React.ReactElement<IPersonProps> {
+  public render(): React.ReactElement<IEmployeeCardProps> {
    
     // https://www.linkedin.com/search/results/all/?keywords=Patric%20Much%20&origin=GLOBAL_SEARCH_HEADER
     return (

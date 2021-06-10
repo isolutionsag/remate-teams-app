@@ -1,14 +1,13 @@
 import IResult from "data/IResult";
 import IUserItem from "data/IUserItem";
 
-export interface IWhoIsWhoState {
+export interface IFaceMatcherState {
     loading: boolean;
-    employees: Array<IUserItem>;
     assignedEmployees: string[];
     completed: boolean;
     validated: boolean;
     results: Array<IResult>;
-    shuffledNames: Array<IUserItem>;
+    shuffledUsers: Array<IUserItem>;
     attempts: number;
     showDialog: boolean;
   }

@@ -1,7 +1,7 @@
 import { MSGraphClient } from '@microsoft/sp-http';
 import IUserItem from 'data/IUserItem';
 
-export default interface IPersonProps {
+export default interface IEmployeeCardProps {
     graphClient: MSGraphClient;
     person: IUserItem;
     onUserDropped: any;

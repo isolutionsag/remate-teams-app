@@ -1,19 +1,19 @@
 import * as React from 'react';
-import styles from './WhoIsWho.module.scss';
+import styles from './FaceMatcher.module.scss';
 import { DefaultButton, Dialog, DialogType, PrimaryButton } from "office-ui-fabric-react";
 import DraggableName from '../DraggableName/DraggableName';
-import { Person } from '../Person/Person';
 import IUserItem from 'data/IUserItem';
-import { IWhoIsWhoProps } from './WhoIsWhoProps';
-import { IWhoIsWhoState } from './IWhoIsWhoState';
+import { IFaceMatcherProps } from './IFaceMatcherProps';
+import { IFaceMatcherState } from './IFaceMatcherState';
 import { GraphService } from 'services/GraphService';
 import TenantService from 'services/TenantService';
 import RankingService from 'services/RankingService';
 import IResult from 'data/IResult';
+import { EmployeeCard } from '../EmployeeCard/EmployeeCard';
 
 const NUMBER_OF_EMPLOYEES: number = 4;
 
-export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoState> {
+export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFaceMatcherState> {
 
   private graphService: GraphService;
   private tenantService: TenantService;
@@ -21,7 +21,7 @@ export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoS
   private storage: string;
 
 
-  constructor(props: IWhoIsWhoProps, state: IWhoIsWhoState) {
+  constructor(props: IFaceMatcherProps, state: IFaceMatcherState) {
     super(props);
 
     this.graphService = new GraphService(this.props.graphClient);
@@ -29,9 +29,8 @@ export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoS
        
     this.state = {
       showDialog: false,
-      shuffledNames: [],
+      shuffledUsers: [],
       loading: true,
-      employees: [],
       assignedEmployees: [],
       completed: false,
       validated: false,
@@ -50,19 +49,11 @@ export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoS
     this.rankingService = new RankingService(this.props.context, this.storage); 
     const users: Array<IUserItem> = await this.graphService.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
 
-    const shuffledNames = users.slice();
-
-    for (let i = shuffledNames.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = shuffledNames[i];
-      shuffledNames[i] = shuffledNames[j];
-      shuffledNames[j] = temp;
-    }
+    const shuffledUsers = this.shuffleUsers(users);
 
     this.setState({
-      shuffledNames: shuffledNames,
-      employees: users,
       loading: false,
+      shuffledUsers: shuffledUsers,
       assignedEmployees: [],
       completed: false,
       results: users.map(x => { return { employee: x, valid: false};})
@@ -70,7 +61,7 @@ export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoS
 
   }
 
-  public render(): React.ReactElement<IWhoIsWhoProps> {
+  public render(): React.ReactElement<IFaceMatcherProps> {
 
     return !this.state.loading &&
       <div draggable={false} className={ styles.whoIsWho }>
@@ -86,7 +77,7 @@ export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoS
             <h3>Remate's Names</h3>
             <p>Drag the names from here:</p>
             <div className={styles.dragDropArea}>
-            {this.state.shuffledNames.map((result: IUserItem) => {
+            {this.state.shuffledUsers.map((result: IUserItem) => {
               return this.state.assignedEmployees.indexOf(result.displayName) === -1 &&
                 <DraggableName user={result}></DraggableName>;
             })}
@@ -95,7 +86,7 @@ export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoS
           
         </div>
         {this.state.results.map((result: IResult, index: number) => {
-          return <Person 
+          return <EmployeeCard 
             expanded={this.state.completed}
             graphClient={this.props.graphClient} 
             person={result.employee} 
@@ -129,13 +120,22 @@ export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoS
             type: DialogType.normal,
             title: this.state.completed ? 'CONGRATULATIONS' : 'OUPS...',
             subText: this.state.completed ? 'You have found all your teammates!' : 'Some of the answers are wrong, try again!',
-          }}
-      >
-      </Dialog>
-
-     
-      
+          }}>
+        </Dialog>
       </div>;
+  }
+
+  private shuffleUsers(users: Array<IUserItem>): Array<IUserItem> {
+    const shuffledUsers = users.slice();
+
+    for (let i: number = shuffledUsers.length - 1; i > 0; i--) {
+      const j: number = Math.floor(Math.random() * (i + 1));
+      const temp: IUserItem = shuffledUsers[i];
+      shuffledUsers[i] = shuffledUsers[j];
+      shuffledUsers[j] = temp;
+    }
+
+    return shuffledUsers;
   }
 
   private reset() {
@@ -143,9 +143,6 @@ export default class WhoIsWho extends React.Component<IWhoIsWhoProps, IWhoIsWhoS
   }
 
   private validateResults() {
-
-    
-
     let results: Array<IResult> = JSON.parse(JSON.stringify(this.state.results));
     const assignedEmployees: string[] = [];
     for (let i=0; i<results.length; i++) {
