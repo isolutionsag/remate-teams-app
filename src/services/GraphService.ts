@@ -1,4 +1,5 @@
 import { MSGraphClient } from '@microsoft/sp-http';
+import IGroupItem from 'data/IGroupItem';
 import IUserItem from 'data/IUserItem';
 
 export class GraphService {
@@ -101,6 +102,51 @@ export class GraphService {
         } catch (err) {
             Promise.reject(err);
         }
+    }
+
+    public async getAllGroups(): Promise<Array<IGroupItem>> {
+        
+        const res: any = await this.client
+            .api("groups")
+            .version("v1.0")
+            .select("id,mailNickname")
+            .get(); 
+
+        if (!res) {
+          return Promise.reject("No results have been fetched");
+        }
+
+        const result: Array<IGroupItem> = res.value.map(group => {
+            return {
+                id: group.id,
+                mailNickname: group.mailNickname
+            }
+        });
+
+        return Promise.resolve(result);
+    }
+
+    public async getGroupMembers(groupId: string): Promise<Array<IGroupItem>> {
+        
+        const res: any = await this.client
+            .api(`groups/${groupId}/members`)
+            .version("v1.0")
+            //.select("id,mailNickname")
+            .get(); 
+
+        if (!res) {
+          return Promise.reject("No results have been fetched");
+        }
+
+        console.dir(res);
+        // const result: Array<IGroupItem> = res.value.map(group => {
+        //     return {
+        //         id: group.id,
+        //         mailNickname: group.mailNickname
+        //     }
+        // });
+
+        return Promise.resolve(res);
     }
     
 }

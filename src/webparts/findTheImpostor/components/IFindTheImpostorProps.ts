@@ -1,3 +1,5 @@
+import { MSGraphClient } from '@microsoft/sp-http';
+
 export interface IFindTheImpostorProps {
-  description: string;
+  graphClient: MSGraphClient;
 }

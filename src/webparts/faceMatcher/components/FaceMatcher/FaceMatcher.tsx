@@ -45,8 +45,6 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
       return;
     }
 
-    this.storage = await this.tenantService.getStorageKey('RemateTeamsApp-SPUrl');
-    this.rankingService = new RankingService(this.props.context, this.storage); 
     const users: Array<IUserItem> = await this.graphService.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
 
     const shuffledUsers = this.shuffleUsers(users);
@@ -142,24 +140,10 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
     window.location.reload();
   }
 
-  private validateResults() {
-    let results: Array<IResult> = JSON.parse(JSON.stringify(this.state.results));
-    const assignedEmployees: string[] = [];
-    for (let i=0; i<results.length; i++) {
-      if (results[i].valid) {
-        assignedEmployees.push(results[i].employee.displayName);
-      } else {
-        results[i].selectedDisplayName = null;
-      }
-    }
-
+  private async updateRanking() {
     let attempts = this.state.attempts;
-    let completed: boolean = false;
 
-    if (assignedEmployees.length === NUMBER_OF_EMPLOYEES) {
-      // You won!
-      completed = true;
-      let points: number = 1;
+    let points: number = 1;
       switch (attempts) {
         case 0:
             points = 3;
@@ -168,18 +152,38 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
             points = 2;
             break;
       }
+
+      this.storage = await this.tenantService.getStorageKey('RemateTeamsApp-SPUrl');
+      this.rankingService = new RankingService(this.props.context, this.storage); 
       this.rankingService.addPointsToCurrentUser(points);
-      
-    } else {
-      attempts++;
+
+  }
+
+  private async validateResults() {
+    let results: Array<IResult> = JSON.parse(JSON.stringify(this.state.results));
+    const assignedEmployees: string[] = [];
+    
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].valid) {
+        assignedEmployees.push(results[i].employee.displayName);
+      } else {
+        results[i].selectedDisplayName = null;
+      }
     }
+
+    let completed: boolean = false;
+
+    if (assignedEmployees.length === NUMBER_OF_EMPLOYEES) {
+      completed = true;
+      await this.updateRanking();
+    } 
 
     this.setState({
       validated: true,
       completed: completed,
       results: results,
       assignedEmployees: assignedEmployees,
-      attempts: attempts,
+      attempts: completed ? 0 : this.state.attempts + 1,
       showDialog: !this.state.showDialog
     });
   }
