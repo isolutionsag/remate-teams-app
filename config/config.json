@@ -1,0 +1,19 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+    "version": "2.0",
+    "bundles": {
+      "remate-launcher-web-part": {
+        "components": [
+          {
+            "entrypoint": "./lib/webparts/remateLauncher/RemateLauncherWebPart.js",
+            "manifest": "./src/webparts/remateLauncher/RemateLauncherWebPart.manifest.json"
+          }
+        ]
+      }
+    },
+    "externals": {},
+    "localizedResources": {
+      "RemateLauncherWebPartStrings": "lib/webparts/remateLauncher/loc/{locale}.js"
+    }
+  }
+  

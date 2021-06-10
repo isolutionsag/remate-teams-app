@@ -1,0 +1,93 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+:global {
+  div#workbenchPageContent {   // for workbench testing
+    max-width: 100%;
+    border: 0;
+    left: 5px;
+    right: 5px;
+
+    .CanvasZone {
+      max-width: 100%;
+      padding: 0 24px;
+      margin: auto;
+    }
+  }
+}
+
+.whoIsWho {
+  @include ms-Grid-row;
+  @include ms-fontColor-black;
+
+  padding: 20px;
+
+  p {
+    line-height: 40px;
+    flex-wrap: wrap;
+    text-align: justify;
+    font-size: 15pt;
+    letter-spacing: 2px;
+  }
+
+  .namesOuterContainer {
+    height: auto;
+    padding: 2px;
+    margin: auto auto 15px;
+    background: linear-gradient(to bottom right,#554596,#c8357e,#de9630);
+    box-shadow: 0 0 3px 0.5px #625396;
+    border-radius: 4px;
+    flex: 1 1;
+
+    .namesInnerContainer {
+      display: flex;
+      padding: 10px;
+      background: #f0f2f5;
+      border-radius: 4px;
+
+      h3 {
+        font-size: 15pt;
+        letter-spacing: 2px;
+        white-space: nowrap;
+        padding: 0 30px;
+      }
+
+      p {
+        line-height: 67px;
+        margin: 0px;
+        white-space: nowrap;
+        font-size: 12pt;
+        padding: 0 30px;
+      }
+
+      .dragDropArea {
+        display: flex;
+        height: 100%;
+        margin: auto;
+        justify-content: center;
+        transition: background-color .2s ease;
+        width: 100%;
+
+
+
+
+        min-height: 52px;
+        align-items: center;
+        font-size: 10pt;
+        letter-spacing: 1.3px;
+        border: 1px solid #b84c8d;
+        border-radius: 4px;
+        background: #fff;
+      }
+    }
+  }
+
+  .buttons {
+    text-align: center;
+    padding-top: 20px;
+    clear: both;
+
+    button {
+      margin-right: 20px;
+    }
+  }
+}

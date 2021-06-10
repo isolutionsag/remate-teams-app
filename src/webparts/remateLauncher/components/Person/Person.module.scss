@@ -1,0 +1,129 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore';
+
+.userPictureContainer {
+
+    @include ms-Grid-col;
+
+    @include ms-xl3;
+    @include ms-lg3;
+   
+    padding: 5px;
+    
+
+    .topContainer {
+
+        background: linear-gradient(to bottom right,#554596,#c8357e,#de9630);
+        box-shadow: 0 0 3px 0.5px #625396;
+        border-radius: 4px;
+
+    .subContainer {
+        display: flex;
+        padding: 10px;
+        height: 100%;
+        border-radius: 4px;
+        flex-direction: column;
+        background: #f0f2f5;
+        justify-content: space-between;
+
+        .userPicture {
+            width: 10rem;
+            min-width: 10rem;
+            min-height: 10rem;
+            border-radius: 50%;
+            border: 1px solid #b84c8d;
+            transition: transform .3s ease;
+            margin: auto;
+            font-size: 60pt;
+            line-height: 150px;
+            text-align: center;
+            background-color: #b84c8d;
+            color: #fff;
+        }
+
+        p {
+            font-size: 12pt;
+            text-align: center;
+        }
+
+        .dropZone {
+            // height: auto!important;
+            border: 1px solid #b84c8d;
+            border-radius: 4px;
+            min-height: 61px;
+            background: #fff;
+        }
+
+        .selectedEmployee {
+            height: 29px;
+            width: auto;
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #d3d3d3;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            font-size: 11pt;
+            letter-spacing: 1.3px;
+
+            background: url(./images/isolutions-logo.png);
+            background-repeat: no-repeat;
+            padding-left: 40px;
+            background-position: 10px;
+            background-size: 20px;
+        }
+
+        .hiddenData {
+            text-align: center;
+            margin-top: 20px;
+
+            i {
+                font-size: 30px;
+            }
+
+            .downArrow {
+                margin-bottom: 20px;
+            }
+            
+            .additionalInfo {
+
+                font-size: 12pt;
+
+                display: flex;
+                flex-direction: column;
+                padding: 12px;
+                border-radius: 2px;
+                background-color: #fff;
+                font-size: 12px;
+                height: 220px;
+                word-break: break-all;
+                overflow: auto;
+
+                h3 {
+                    font-size: 15pt;
+                    font-weight: 600;
+                    letter-spacing: 2px;
+
+                    text-align: center;
+                }
+
+                h4 {
+                    font-weight: normal;
+                    text-decoration: underline;
+                    text-align: center;
+
+                }
+
+                p {
+                    font-size: 12pt;
+                    font-size: 8pt;
+        line-height: 0px;
+                }
+            }
+        }
+    }
+}
+
+    
+
+
+}
