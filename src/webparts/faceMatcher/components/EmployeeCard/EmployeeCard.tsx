@@ -1,119 +1,99 @@
 import * as React from 'react';
 import { GraphService } from 'services/GraphService';
 import IEmployeeCardProps from './IEmployeeCardProps';
-import IEmployeeCardState from './IEmployeeCardState';
 import styles from './EmployeeCard.module.scss';
 import DraggableName from '../DraggableName/DraggableName';
-import { EmployeeExtendedInfo } from '../EmployeeExtendedInfo/EmployeeExtendedInfo';
+import EmployeeExtendedInfo from '../EmployeeExtendedInfo/EmployeeExtendedInfo';
+import { useEffect, useState } from 'react';
 
+const EmployeeCard: React.FunctionComponent<IEmployeeCardProps> = props => {
 
-export class EmployeeCard extends React.Component<IEmployeeCardProps, IEmployeeCardState> {
+  const [image, setImage] = useState("");
 
-  private service: GraphService;
+  const _getImage = async (): Promise<void> => {
+    const service = new GraphService(props.graphClient);
+    const photo = await service.getEmployeePhoto(props.person.id);
+    setImage(photo);
+  };
 
-  constructor(props: IEmployeeCardProps) {
-    super(props);
+  useEffect(() => {
+    _getImage();
+  }, []);
 
-    this.service = new GraphService(this.props.graphClient);
+  const dragEmployeeOver = (event: any): void => {
+    event.preventDefault();
 
-    this.state = {
-      image: null
-    };
-  }
-
-  public async componentDidMount(): Promise<void> {
-    if (!this.props.person) {
+    if (props.selectedEmployee) {
       return;
     }
 
-    try {
-      const photo = await this.service.getEmployeePhoto(this.props.person.id);
+    event.target.style.backgroundColor = "skyblue";
+  };
 
-      this.setState({
-        image: photo
-      });
-    }
-    catch {
-      console.error("No user image found");
-    }
-  }
+  const dragEmployeeLeave = (event: any): void => {
+    event.preventDefault();
 
-  public render(): React.ReactElement<IEmployeeCardProps> {
-
-    return (
-      <div className={styles.employeeCard}>
-
-        <div className={styles.container}
-          style={{
-            backgroundColor: this.getCardBackgroundColor()
-          }}>
-          {this.state.image ?
-            <img className={styles.userPicture} src={this.state.image} /> :
-            <div className={styles.userPicture}>{this.props.person.initials}</div>}
-          <p>Drop the name over here:</p>
-          <div
-            className={styles.dropZone}
-            onDragOver={(e) => this.dragEmployeeOver(e)}
-            onDrop={(e) => this.dropEmployeeName(e)}
-            onDragLeave={(e) => this.dragEmployeeLeave(e)}
-          >
-            {this.props.selectedEmployee &&
-            <DraggableName employee={this.props.selectedEmployee} blocked={true} />}
-          </div>
-            {this.props.expanded &&
-            <EmployeeExtendedInfo person={this.props.person} graphClient={this.props.graphClient} />}
-        </div>
-      </div>
-    );
-  }
-
-  private dragEmployeeOver(ev: any) {
-    ev.preventDefault();
-
-    if (this.props.selectedEmployee) {
+    if (props.selectedEmployee) {
       return;
     }
 
-    ev.target.style.backgroundColor = "skyblue";
-  }
+    event.target.style.backgroundColor = "white";
+  };
 
-  private dragEmployeeLeave(ev) {
-    ev.preventDefault();
-
-    if (this.props.selectedEmployee) {
+  const dropEmployeeName = (event: any): void => {
+    if (props.selectedEmployee) {
       return;
     }
 
-    ev.target.style.backgroundColor = "white";
-  }
+    event.target.style.backgroundColor = "white";
 
-  private dropEmployeeName(ev) {
-    if (this.props.selectedEmployee) {
-      return;
-    }
+    const employee = JSON.parse(event.dataTransfer.getData("employee"));
 
-    ev.target.style.backgroundColor = "white";
-
-    const employee = JSON.parse(ev.dataTransfer.getData("employee"));
-    
     if (employee) {
-      this.props.onUserDropped(employee);
+      props.onUserDropped(employee);
     }
-  }
+  };
 
-  private getCardBackgroundColor(): string {
-    if (this.props.result.completed) {
+  const getCardBackgroundColor = (): string => {
+    if (props.result.completed) {
       return "#90ee90";
     }
-    
-    if (!this.props.validated) {
+
+    if (!props.validated) {
       return '#f0f2f5';
     }
 
-    if (this.props.selectedEmployee && this.props.person.id === this.props.selectedEmployee.id) {
+    if (props.selectedEmployee && props.person.id === props.selectedEmployee.id) {
       return "#90ee90";
     }
 
     return "#ffd2d2";
-  }
-}
+  };
+
+  return (
+    <div className={styles.employeeCard}>
+
+      <div className={styles.container}
+        style={{
+          backgroundColor: getCardBackgroundColor()
+        }}>
+        {image ?
+          <img className={styles.userPicture} src={image} /> :
+          <div className={styles.userPicture}>{props.person.initials}</div>}
+        <p>Drop the name over here:</p>
+        <div
+          className={styles.dropZone}
+          onDragOver={(e) => dragEmployeeOver(e)}
+          onDrop={(e) => dropEmployeeName(e)}
+          onDragLeave={(e) => dragEmployeeLeave(e)}
+        >
+          {props.selectedEmployee &&
+            <DraggableName employee={props.selectedEmployee} blocked={true} />}
+        </div>
+        {props.expanded &&
+          <EmployeeExtendedInfo person={props.person} graphClient={props.graphClient} />}
+      </div>
+    </div>
+  );
+};
+export default EmployeeCard;

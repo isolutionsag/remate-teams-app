@@ -4,205 +4,171 @@ import { DefaultButton, Dialog, DialogType, Icon, PrimaryButton } from "office-u
 import DraggableName from '../DraggableName/DraggableName';
 import IUserItem from 'data/IUserItem';
 import { IFaceMatcherProps } from './IFaceMatcherProps';
-import { IFaceMatcherState } from './IFaceMatcherState';
 import { GraphService } from 'services/GraphService';
 import TenantService from 'services/TenantService';
 import RankingService from 'services/RankingService';
 import IResult from 'data/IResult';
-import { EmployeeCard } from '../EmployeeCard/EmployeeCard';
+import EmployeeCard from '../EmployeeCard/EmployeeCard';
+import { useEffect, useState } from 'react';
 
-const NUMBER_OF_EMPLOYEES: number = 4;
+const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
 
-export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFaceMatcherState> {
+  const NUMBER_OF_EMPLOYEES: number = 4;
 
-  private graphService: GraphService;
-  private tenantService: TenantService;
-  private rankingService: RankingService;
-  private storage: string;
+  const [shuffledUsers, setShuffledUsers] = useState([]);
+  const [assignedEmployees, setAssignedEmployees] = useState([]);
+  const [results, setResults] = useState([]);
+  const [completed, setCompleted] = useState(false);
+  const [validated, setValidated] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+  const [showDialog, setShowDialog] = useState(false);
 
+  const _getEmployees = async (): Promise<void> => {
+    const graphService = new GraphService(props.graphClient);
 
-  constructor(props: IFaceMatcherProps, state: IFaceMatcherState) {
-    super(props);
+    const users: Array<IUserItem> = await graphService.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
 
-    this.graphService = new GraphService(this.props.graphClient);
-    this.tenantService = new TenantService(this.props.context);
-       
-    this.state = {
-      showDialog: false,
-      shuffledUsers: [],
-      loading: true,
-      assignedEmployees: [],
-      completed: false,
-      validated: false,
-      results: [],
-      attempts: 0
-    };
-  }
+    const _shuffledUsers = await graphService.shuffleUsers(users);
+    setShuffledUsers(_shuffledUsers);
+    setResults(users.map(x => { return { employee: x, valid: false, completed: false }; }));
+  };
 
-  public async componentDidMount(): Promise<void> {
+  useEffect(() => {
+    _getEmployees();
+  }, []);
 
-    if (!this.props.graphClient) {
-      return;
-    }
-
-    const users: Array<IUserItem> = await this.graphService.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
-
-    const shuffledUsers = this.graphService.shuffleUsers(users);
-
-    this.setState({
-      loading: false,
-      shuffledUsers: shuffledUsers,
-      assignedEmployees: [],
-      completed: false,
-      results: users.map(x => { return { employee: x, valid: false, completed: false};})
-    });
-
-  }
-
-  public render(): React.ReactElement<IFaceMatcherProps> {
-
-    return !this.state.loading &&
-      <div draggable={false} className={styles.faceMatcher}>
-
-        
-        <p>
-          Welcome to the <strong>WHO'S WHO game</strong>. Do you know your mates' faces or at least what they look like?
-          This is a drag & drop game in which you have to drag the names of each person under their
-          respective heads and then click on the <span className={styles.button}><Icon iconName='SkypeCheck' /> Check</span> button 
-          below to check your answers.
-        </p>
-        <p>
-          If you are wrong, don't worry, everyone may have a 2nd chance ! If you feel lucky, don't hesitate
-          to try your luck again by clicking on <span className={styles.button}><Icon iconName='Sync' /> Play Again</span>
-        </p>
-        <p>
-          If you find it the first try, you win 3 points | On the second try, 2 points | 
-          Three or more tries, 1 point.
-        </p>
-        
-        <hr/>
-        
-        <div className={styles.namesOuterContainer}>
-          <div className={styles.namesInnerContainer}>
-            <div className={styles.xxx}>
-            <h3>Remate's Names</h3>
-            <p>Drag the names from here:</p>
-            <div className={styles.dragDropArea}>
-            {this.state.shuffledUsers.map((employee: IUserItem) => {
-              return this.state.assignedEmployees.indexOf(employee.displayName) === -1 &&
-                <DraggableName employee={employee}></DraggableName>;
-            })}
-            </div>
-            </div>
-          </div>
-          
-        </div>
-        <div className={styles.employeeCardContainer}>
-          {this.state.results.map((result: IResult, index: number) => {
-            return <EmployeeCard 
-              expanded={this.state.completed}
-              result={result}
-              graphClient={this.props.graphClient} 
-              person={result.employee} 
-              selectedEmployee={result.selectedEmployee}
-              //selectedDisplayName={result.selectedDisplayName}
-              onUserDropped={(employee: IUserItem) => this.employeeDropped(employee, index)} 
-              validated={this.state.validated}
-              />;
-          })}
-        </div>
-
-        <div className={styles.buttons}>
-          <PrimaryButton
-            iconProps={{iconName: 'SkypeCheck'}}
-            text='Check' 
-            disabled={this.state.assignedEmployees.length !== NUMBER_OF_EMPLOYEES || this.state.completed} 
-            onClick={this.validateResults.bind(this)} 
-            />
-          <DefaultButton
-            iconProps={{iconName: 'Sync'}}
-            text='Play Again' 
-            disabled={!this.state.completed} 
-            onClick={this.reset.bind(this)}
-            />
-        </div>
-
-        <Dialog
-          hidden={!this.state.showDialog}
-          onDismiss={() => {
-            this.setState({showDialog: !this.state.showDialog, validated: false});
-          }}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: this.state.completed ? 'CONGRATULATIONS' : 'OUPS...',
-            subText: this.state.completed ? 'You have found all your teammates!' : 'Some of the answers are wrong, try again!',
-          }}>
-        </Dialog>
-      </div>;
-  }
-
-  private reset() {
+  const reset = () => {
     window.location.reload();
-  }
+  };
 
-  private async updateRanking() {
-    let attempts = this.state.attempts;
+  const updateRanking = async () => {
 
     let points: number = 1;
-      switch (attempts) {
-        case 0:
-            points = 3;
-            break;
-        case 1:
-            points = 2;
-            break;
-      }
+    switch (attempts) {
+      case 0:
+        points = 3;
+        break;
+      case 1:
+        points = 2;
+        break;
+    }
 
-      this.storage = await this.tenantService.getStorageKey('RemateTeamsApp-SPUrl');
-      this.rankingService = new RankingService(this.props.context, this.storage); 
-      this.rankingService.addPointsToCurrentUser(points);
+    const tenantService = new TenantService(props.context);
+    const storage = await tenantService.getStorageKey('RemateTeamsApp-SPUrl');
+    const rankingService = new RankingService(props.context, storage); 
+    rankingService.addPointsToCurrentUser(points);
+  };
 
-  }
+  const validateResults = async () => {
+    const _assignedEmployees: string[] = [];
 
-  private async validateResults() {
-    let results: Array<IResult> = JSON.parse(JSON.stringify(this.state.results));
-    const assignedEmployees: string[] = [];
-    
     for (let i = 0; i < results.length; i++) {
       if (results[i].valid) {
-        assignedEmployees.push(results[i].employee.displayName);
+        _assignedEmployees.push(results[i].employee.displayName);
         results[i].completed = true;
       } else {
         results[i].selectedEmployee = null;
       }
     }
 
-    let completed: boolean = false;
+    if (_assignedEmployees.length === NUMBER_OF_EMPLOYEES) {
+      setCompleted(true);
+      await updateRanking();
+    }
 
-    if (assignedEmployees.length === NUMBER_OF_EMPLOYEES) {
-      completed = true;
-      await this.updateRanking();
-    } 
+    setValidated(true);
+    setResults(results);
+    setAssignedEmployees(_assignedEmployees);
+    setAttempts(completed ? 0 : attempts + 1);
+    setShowDialog(!showDialog);
 
-    this.setState({
-      validated: true,
-      completed: completed,
-      results: results,
-      assignedEmployees: assignedEmployees,
-      attempts: completed ? 0 : this.state.attempts + 1,
-      showDialog: !this.state.showDialog
-    });
-  }
+  };
 
-  private employeeDropped(user: IUserItem, index: number) {
-
-    let results: Array<IResult> = JSON.parse(JSON.stringify(this.state.results));
-    results[index].valid = this.state.results[index].employee.id === user.id;
+  const employeeDropped = (user: IUserItem, index: number) => {
+    results[index].valid = results[index].employee.id === user.id;
     results[index].selectedEmployee = user;
-    
-    this.setState({
-      assignedEmployees: [...this.state.assignedEmployees, user.displayName],
-      results: results
-    });
-  }
-}
+
+    setAssignedEmployees([...assignedEmployees, user.displayName]);
+    setResults(results);
+  };
+
+
+  return (
+    <div draggable={false} className={styles.faceMatcher}>
+      <p>
+        Welcome to the <strong>WHO'S WHO game</strong>. Do you know your mates' faces or at least what they look like?
+        This is a drag & drop game in which you have to drag the names of each person under their
+        respective heads and then click on the <span className={styles.button}><Icon iconName='SkypeCheck' /> Check</span> button
+        below to check your answers.
+      </p>
+      <p>
+        If you are wrong, don't worry, everyone may have a 2nd chance ! If you feel lucky, don't hesitate
+        to try your luck again by clicking on <span className={styles.button}><Icon iconName='Sync' /> Play Again</span>
+      </p>
+      <p>
+        If you find it the first try, you win 3 points | On the second try, 2 points |
+        Three or more tries, 1 point.
+      </p>
+
+      <hr />
+
+      <div className={styles.namesOuterContainer}>
+        <div className={styles.namesInnerContainer}>
+          <div className={styles.xxx}>
+            <h3>Remate's Names</h3>
+            <p>Drag the names from here:</p>
+            <div className={styles.dragDropArea}>
+              {shuffledUsers.map((employee: IUserItem) => {
+                return assignedEmployees.indexOf(employee.displayName) === -1 &&
+                  <DraggableName employee={employee}></DraggableName>;
+              })}
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div className={styles.employeeCardContainer}>
+        {results.map((result: IResult, index: number) => {
+          return <EmployeeCard
+            expanded={completed}
+            result={result}
+            graphClient={props.graphClient}
+            person={result.employee}
+            selectedEmployee={result.selectedEmployee}
+            onUserDropped={(employee: IUserItem) => employeeDropped(employee, index)}
+            validated={validated}
+          />;
+        })}
+      </div>
+
+      <div className={styles.buttons}>
+        <PrimaryButton
+          iconProps={{ iconName: 'SkypeCheck' }}
+          text='Check'
+          disabled={assignedEmployees.length !== NUMBER_OF_EMPLOYEES || completed}
+          onClick={validateResults.bind(this)}
+        />
+        <DefaultButton
+          iconProps={{ iconName: 'Sync' }}
+          text='Play Again'
+          disabled={!completed}
+          onClick={reset.bind(this)}
+        />
+      </div>
+
+      <Dialog
+        hidden={!showDialog}
+        onDismiss={() => {
+          setShowDialog(!showDialog);
+          setValidated(false);
+        }}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: completed ? 'CONGRATULATIONS' : 'OUPS...',
+          subText: completed ? 'You have found all your teammates!' : 'Some of the answers are wrong, try again!',
+        }}>
+      </Dialog>
+    </div>
+  );
+};
+export default FaceMatcher;
