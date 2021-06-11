@@ -1,4 +1,5 @@
 import { MSGraphClient } from '@microsoft/sp-http';
+import IResult from 'data/IResult';
 import IUserItem from 'data/IUserItem';
 
 export default interface IEmployeeCardProps {
@@ -6,6 +7,8 @@ export default interface IEmployeeCardProps {
     person: IUserItem;
     onUserDropped: any;
     validated: boolean;
-    selectedDisplayName?: string;
+    // selectedDisplayName?: string;
+    selectedEmployee?: IUserItem;
     expanded: boolean;
+    result: IResult;
   }

@@ -6,5 +6,5 @@ export default interface IUserItem {
     initials: string;
     jobTitle?: string;
     officeLocation?: string;
-    interests?: any;
+    impostor?: boolean;
   }

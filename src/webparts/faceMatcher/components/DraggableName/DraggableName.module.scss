@@ -1,5 +1,5 @@
 .draggableUser {
-  height: 41px;
+  height: 29px;
   width: auto;
   margin: 5px;
   padding: 10px;
@@ -8,10 +8,9 @@
   display: flex;
   align-items: center;
   font-size: 11pt;
-  letter-spacing: 1.3px;
-  background: url(./images/isolutions-logo.png);
-  background-repeat: no-repeat;
-  padding-left: 40px;
-  background-position: 10px;
-  background-size: 20px;
+  font-weight: 600;
+
+  i {
+    margin-right: 10px;
+  }
 }

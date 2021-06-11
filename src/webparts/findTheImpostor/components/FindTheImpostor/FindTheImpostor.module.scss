@@ -1,0 +1,51 @@
+
+:global {
+  div#workbenchPageContent {   // for workbench testing
+    max-width: 100%;
+    border: 0;
+    left: 5px;
+    right: 5px;
+
+    .CanvasZone {
+      max-width: 100%;
+      padding: 0 24px;
+      margin: auto;
+    }
+  }
+}
+
+.findTheImpostor {
+  font-size: 15pt;
+  letter-spacing: 2px;
+  text-align: center;
+
+  .numberOfImpostorSelector {
+    display: flex;
+    justify-content: center;
+
+    .oneImpostor {
+      background-image: url(./images/oneImpostor.png);
+      height: 125px;
+      width: 120px;
+      background-size: 120px;
+    }
+  
+    .twoImpostors {
+      background-size: 160px;
+      width: 150px;
+      width: 150px;
+      background-image: url(./images/twoImpostors.png);
+    }
+  
+    .oneImpostor, .twoImpostors {
+      cursor: pointer;
+      margin: 50px;
+      background-repeat: no-repeat;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+}

@@ -1,6 +1,7 @@
 import IGroupItem from "data/IGroupItem";
 
 export interface IFindTheImpostorState {
-  loaded: boolean;
+  impostorsCount?: number;
+  selectedGroup?: IGroupItem;
   groups: Array<IGroupItem>;
 }

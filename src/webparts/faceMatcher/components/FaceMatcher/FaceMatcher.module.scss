@@ -1,4 +1,3 @@
-@import '~office-ui-fabric-react/dist/sass/References.scss';
 
 :global {
   div#workbenchPageContent {   // for workbench testing
@@ -15,18 +14,34 @@
   }
 }
 
-.whoIsWho {
-  @include ms-Grid-row;
-  @include ms-fontColor-black;
+.faceMatcher {
 
+  font-family: "Segoe UI",system-ui,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
+  max-width: 1200px;
+  margin: auto;
   padding: 20px;
+
+  .button {
+    display: inline-block;
+    background: #eee;
+    padding: 5px 15px;
+    margin: 0 10px;
+
+    i {
+      font-size: 14px;
+      margin-right: 5px;
+    }
+  }
 
   p {
     line-height: 40px;
-    flex-wrap: wrap;
     text-align: justify;
-    font-size: 15pt;
-    letter-spacing: 2px;
+    font-size: 17px;
+    font-weight: 500;
+  }
+
+  hr {
+    margin: 40px 0;
   }
 
   .namesOuterContainer {
@@ -44,41 +59,64 @@
       background: #f0f2f5;
       border-radius: 4px;
 
-      h3 {
-        font-size: 15pt;
-        letter-spacing: 2px;
-        white-space: nowrap;
-        padding: 0 30px;
-      }
+      .xxx {
 
-      p {
-        line-height: 67px;
-        margin: 0px;
-        white-space: nowrap;
-        font-size: 12pt;
-        padding: 0 30px;
-      }
-
-      .dragDropArea {
-        display: flex;
-        height: 100%;
-        margin: auto;
-        justify-content: center;
-        transition: background-color .2s ease;
+        display: grid;
+        grid-column-gap: auto;
+        grid-template-columns: 20% 24% 56%;
         width: 100%;
-
-
-
-
-        min-height: 52px;
-        align-items: center;
+        border-radius: 2px;
         font-size: 10pt;
-        letter-spacing: 1.3px;
-        border: 1px solid #b84c8d;
-        border-radius: 4px;
-        background: #fff;
+
+        @media only screen and (max-width: 1300px) {
+          grid-template-columns: 50% 50%;
+        }
+
+        h3 {
+          font-size: 15pt;
+          white-space: nowrap;
+          padding: 0 30px;
+        }
+  
+        p {
+          line-height: 71px;
+          margin: 0px;
+          white-space: nowrap;
+          font-size: 12pt;
+          padding: 0 30px;
+        }
+  
+        .dragDropArea {
+          display: flex;
+          height: 100%;
+          margin: auto;
+          justify-content: center;
+          transition: background-color .2s ease;
+          width: 100%;
+          min-height: 52px;
+          align-items: center;
+          font-size: 10pt;
+          border: 1px solid #b84c8d;
+          border-radius: 4px;
+          background: #fff;
+
+          @media only screen and (max-width: 1300px) {
+            grid-column: 1/span 2;
+          }
+        }
       }
+
+     
     }
+  }
+
+  .employeeCardContainer {
+    display: grid;
+    grid-row-gap: 15px;
+    grid-column-gap: 17px;
+    grid-template-columns: 24% 24% 24% 24%;
+    height: auto;
+    justify-content: center;
   }
 
   .buttons {

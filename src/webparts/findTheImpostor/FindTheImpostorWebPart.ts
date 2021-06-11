@@ -3,8 +3,8 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { MSGraphClient } from '@microsoft/sp-http';
-import FindTheImpostor from './components/FindTheImpostor';
-import { IFindTheImpostorProps } from './components/IFindTheImpostorProps';
+import FindTheImpostor from './components/FindTheImpostor/FindTheImpostor';
+import { IFindTheImpostorProps } from './components/FindTheImpostor/IFindTheImpostorProps';
 
 
 export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {

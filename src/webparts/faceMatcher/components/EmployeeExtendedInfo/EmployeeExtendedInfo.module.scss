@@ -1,0 +1,48 @@
+.employeeExtendedInfo {
+    text-align: center;
+    margin-top: 20px;
+
+    i {
+        font-size: 30px;
+    }
+
+    .downArrow {
+        margin-bottom: 20px;
+    }
+    
+    .additionalInfo {
+
+        font-size: 12pt;
+
+        display: flex;
+        flex-direction: column;
+        padding: 12px;
+        border-radius: 2px;
+        background-color: #fff;
+        font-size: 12px;
+        height: 220px;
+        word-break: break-all;
+        overflow: auto;
+
+        h3 {
+            font-size: 15pt;
+            font-weight: 600;
+            letter-spacing: 2px;
+
+            text-align: center;
+        }
+
+        h4 {
+            font-weight: normal;
+            text-decoration: underline;
+            text-align: center;
+
+        }
+
+        p {
+            font-size: 12pt;
+            font-size: 8pt;
+            line-height: 0px;
+        }
+    }
+}

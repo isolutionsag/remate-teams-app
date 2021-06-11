@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './FaceMatcher.module.scss';
-import { DefaultButton, Dialog, DialogType, PrimaryButton } from "office-ui-fabric-react";
+import { DefaultButton, Dialog, DialogType, Icon, PrimaryButton } from "office-ui-fabric-react";
 import DraggableName from '../DraggableName/DraggableName';
 import IUserItem from 'data/IUserItem';
 import { IFaceMatcherProps } from './IFaceMatcherProps';
@@ -47,14 +47,14 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
 
     const users: Array<IUserItem> = await this.graphService.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
 
-    const shuffledUsers = this.shuffleUsers(users);
+    const shuffledUsers = this.graphService.shuffleUsers(users);
 
     this.setState({
       loading: false,
       shuffledUsers: shuffledUsers,
       assignedEmployees: [],
       completed: false,
-      results: users.map(x => { return { employee: x, valid: false};})
+      results: users.map(x => { return { employee: x, valid: false, completed: false};})
     });
 
   }
@@ -62,37 +62,55 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
   public render(): React.ReactElement<IFaceMatcherProps> {
 
     return !this.state.loading &&
-      <div draggable={false} className={ styles.whoIsWho }>
+      <div draggable={false} className={styles.faceMatcher}>
 
-        <div>
-          <p>Welcome to the WHO'S WHO game. Do you know your mates' faces or at least what they look like? This is a drag & drop game in which you have to drag the names of each person under their respective heads and then click on theConfirm ✔️button below to check your answers.</p>
-          <p>If you are wrong, don't worry, everyone may have a 2nd chance ! If you feel lucky, don't hesitate to try your luck again by clicking onPlay Again 🔄</p>
-          <p>If you find it the first try, you win 3 points | On the second try, 2 points | Three or more tries, 1 point.</p>
-        </div>
+        
+        <p>
+          Welcome to the <strong>WHO'S WHO game</strong>. Do you know your mates' faces or at least what they look like?
+          This is a drag & drop game in which you have to drag the names of each person under their
+          respective heads and then click on the <span className={styles.button}><Icon iconName='SkypeCheck' /> Check</span> button 
+          below to check your answers.
+        </p>
+        <p>
+          If you are wrong, don't worry, everyone may have a 2nd chance ! If you feel lucky, don't hesitate
+          to try your luck again by clicking on <span className={styles.button}><Icon iconName='Sync' /> Play Again</span>
+        </p>
+        <p>
+          If you find it the first try, you win 3 points | On the second try, 2 points | 
+          Three or more tries, 1 point.
+        </p>
+        
+        <hr/>
         
         <div className={styles.namesOuterContainer}>
           <div className={styles.namesInnerContainer}>
+            <div className={styles.xxx}>
             <h3>Remate's Names</h3>
             <p>Drag the names from here:</p>
             <div className={styles.dragDropArea}>
-            {this.state.shuffledUsers.map((result: IUserItem) => {
-              return this.state.assignedEmployees.indexOf(result.displayName) === -1 &&
-                <DraggableName user={result}></DraggableName>;
+            {this.state.shuffledUsers.map((employee: IUserItem) => {
+              return this.state.assignedEmployees.indexOf(employee.displayName) === -1 &&
+                <DraggableName employee={employee}></DraggableName>;
             })}
+            </div>
             </div>
           </div>
           
         </div>
-        {this.state.results.map((result: IResult, index: number) => {
-          return <EmployeeCard 
-            expanded={this.state.completed}
-            graphClient={this.props.graphClient} 
-            person={result.employee} 
-            selectedDisplayName={result.selectedDisplayName}
-            onUserDropped={(employeeDisplayName: string) => this.employeeDropped(employeeDisplayName, index)} 
-            validated={this.state.validated}
-            />;
-        })}
+        <div className={styles.employeeCardContainer}>
+          {this.state.results.map((result: IResult, index: number) => {
+            return <EmployeeCard 
+              expanded={this.state.completed}
+              result={result}
+              graphClient={this.props.graphClient} 
+              person={result.employee} 
+              selectedEmployee={result.selectedEmployee}
+              //selectedDisplayName={result.selectedDisplayName}
+              onUserDropped={(employee: IUserItem) => this.employeeDropped(employee, index)} 
+              validated={this.state.validated}
+              />;
+          })}
+        </div>
 
         <div className={styles.buttons}>
           <PrimaryButton
@@ -112,7 +130,7 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
         <Dialog
           hidden={!this.state.showDialog}
           onDismiss={() => {
-            this.setState({showDialog: !this.state.showDialog});
+            this.setState({showDialog: !this.state.showDialog, validated: false});
           }}
           dialogContentProps={{
             type: DialogType.normal,
@@ -121,19 +139,6 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
           }}>
         </Dialog>
       </div>;
-  }
-
-  private shuffleUsers(users: Array<IUserItem>): Array<IUserItem> {
-    const shuffledUsers = users.slice();
-
-    for (let i: number = shuffledUsers.length - 1; i > 0; i--) {
-      const j: number = Math.floor(Math.random() * (i + 1));
-      const temp: IUserItem = shuffledUsers[i];
-      shuffledUsers[i] = shuffledUsers[j];
-      shuffledUsers[j] = temp;
-    }
-
-    return shuffledUsers;
   }
 
   private reset() {
@@ -166,8 +171,9 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
     for (let i = 0; i < results.length; i++) {
       if (results[i].valid) {
         assignedEmployees.push(results[i].employee.displayName);
+        results[i].completed = true;
       } else {
-        results[i].selectedDisplayName = null;
+        results[i].selectedEmployee = null;
       }
     }
 
@@ -188,14 +194,14 @@ export default class FaceMatcher extends React.Component<IFaceMatcherProps, IFac
     });
   }
 
-  private employeeDropped(user: string, index: number) {
+  private employeeDropped(user: IUserItem, index: number) {
 
     let results: Array<IResult> = JSON.parse(JSON.stringify(this.state.results));
-    results[index].valid = this.state.results[index].employee.displayName === user;
-    results[index].selectedDisplayName = user;
+    results[index].valid = this.state.results[index].employee.id === user.id;
+    results[index].selectedEmployee = user;
     
     this.setState({
-      assignedEmployees: [...this.state.assignedEmployees, user],
+      assignedEmployees: [...this.state.assignedEmployees, user.displayName],
       results: results
     });
   }

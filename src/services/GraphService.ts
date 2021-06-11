@@ -19,23 +19,14 @@ export class GraphService {
         }
 
         let result: any[] = res.value.slice();
-        let n = Math.min(count, result.length);
+        let totalItems = Math.min(count, result.length);
 
         var users: Array<IUserItem> = new Array<IUserItem>();
-        while (users.length < n) {
+        while (users.length < totalItems) {
 
             const random = Math.floor(Math.random() * result.length);
 
-            users.push({
-                id: result[random].id,
-                displayName: result[random].displayName,
-                mail: result[random].mail,
-                userPrincipalName: result[random].userPrincipalName,
-                initials: result[random].displayName.match(/\b(\w)/g).join('').substr(0, 2),
-                jobTitle: result[random].jobTitle,
-                officeLocation: result[random].officeLocation,
-                interests: result[random].interests
-            });
+            users.push(this.mapUserData(result[random]));
 
             result = result.filter((value, index, arr) => { 
                 return index !== random;
@@ -44,30 +35,7 @@ export class GraphService {
 
         return Promise.resolve(users);
     }
-
-    public async getCurrentUserProfile(): Promise<IUserItem> {
-        
-        const res = await this.client
-            .api("me")
-            .version("v1.0")
-            .select("id,displayName,mail,userPrincipalName")
-            .get(); 
-
-        if (!res) {
-          return Promise.reject("No results have been fetched");
-        }
-
-        const user = {
-            id: res[0].id,
-            displayName: res[0].displayName,
-            mail: res[0].mail,
-            userPrincipalName: res[0].userPrincipalName,
-            initials: ''
-        };
-
-        return Promise.resolve(user);
-    }
-            
+         
     public async getEmployeePhoto(employeeId: string): Promise<string> {
         try {
             const blob = await  this.client
@@ -120,33 +88,101 @@ export class GraphService {
             return {
                 id: group.id,
                 mailNickname: group.mailNickname
-            }
+            };
         });
 
         return Promise.resolve(result);
     }
 
-    public async getGroupMembers(groupId: string): Promise<Array<IGroupItem>> {
+    public async getGroupMembers(groupId: string): Promise<Array<IUserItem>> {
         
         const res: any = await this.client
             .api(`groups/${groupId}/members`)
             .version("v1.0")
-            //.select("id,mailNickname")
+            .select("id,displayName,mail,jobTitle")
             .get(); 
 
         if (!res) {
           return Promise.reject("No results have been fetched");
         }
 
-        console.dir(res);
-        // const result: Array<IGroupItem> = res.value.map(group => {
-        //     return {
-        //         id: group.id,
-        //         mailNickname: group.mailNickname
-        //     }
-        // });
+        const result: Array<IUserItem> = res.value.map(member => this.mapUserData(member));
 
-        return Promise.resolve(res);
+        return Promise.resolve(result);
+    }
+
+    public async addRandomEmployees(groupMembers: Array<IUserItem>, numberToAdd: number) {
+        const allEmployeesRaw = await this.client
+            .api("users")
+            .version("v1.0")
+            .select("id,displayName,mail,userPrincipalName,jobTitle,officeLocation")
+            .get(); 
+
+        if (!allEmployeesRaw) {
+          return Promise.reject("No results have been fetched");
+        }
+
+        const unexistingEmployees = this.getUnexistingEmployees(groupMembers, allEmployeesRaw.value);
+
+        if (unexistingEmployees.length < numberToAdd) {
+            Promise.reject("Can't play with this group.");
+        }
+
+        let result: any[] = unexistingEmployees.slice();
+        let added: number = 0;
+        
+        var users: Array<IUserItem> = groupMembers.slice();
+        while (added < numberToAdd) {
+
+            const random = Math.floor(Math.random() * result.length);
+            let userToAdd: IUserItem = this.mapUserData(result[random]);
+            userToAdd.impostor = true;
+            users.push(userToAdd);
+
+            result = result.filter((value, index, arr) => { 
+                return index !== random;
+            });
+
+            added ++;
+        }
+
+        return Promise.resolve(this.shuffleUsers(users));
+
+    }
+
+    public shuffleUsers(users: Array<IUserItem>): Array<IUserItem> {
+        const shuffledUsers = users.slice();
+    
+        for (let i: number = shuffledUsers.length - 1; i > 0; i--) {
+          const j: number = Math.floor(Math.random() * (i + 1));
+          const temp: IUserItem = shuffledUsers[i];
+          shuffledUsers[i] = shuffledUsers[j];
+          shuffledUsers[j] = temp;
+        }
+    
+        return shuffledUsers;
+      }
+
+    private getUnexistingEmployees(groupMembers: Array<IUserItem>, allEmployees: Array<any>): Array<any> {
+        const ids: Array<string> = groupMembers.map(x => x.id);
+
+        const unexistingEmployees = allEmployees.filter((value, index, arr) => {
+            return ids.indexOf(value.id) === -1;
+        });
+
+        return unexistingEmployees;
+    }
+
+    private mapUserData(graphResult: any): IUserItem {
+        return {
+            id: graphResult.id,
+            displayName: graphResult.displayName,
+            mail: graphResult.mail,
+            userPrincipalName: graphResult.userPrincipalName,
+            initials: graphResult.displayName.match(/\b(\w)/g).join('').substr(0, 2),
+            jobTitle: graphResult.jobTitle,
+            officeLocation: graphResult.officeLocation
+        };
     }
     
 }

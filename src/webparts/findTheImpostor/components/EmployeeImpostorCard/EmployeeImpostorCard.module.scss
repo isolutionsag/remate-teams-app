@@ -1,0 +1,68 @@
+.employeeImpostorCard {
+    padding: 2px;
+    background: linear-gradient(to bottom right,#554596,#c8357e,#de9630);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .2s;
+    position: relative;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    .votedOverlay {
+        background-image: url(./images/voted.5da0560c.png);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-size: 50%;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 2;
+    }
+
+    .container {
+        display: grid;
+        height: 100%;
+        text-align: center;
+        background-color: #fff;
+        border-radius: 6px;
+        font-size: 14pt;
+
+        .initials {
+            width: 64px;
+            height: 64px;
+            line-height: 64px;
+            font-size: 18px;
+            z-index: 1;
+            margin: 10px auto;
+            border-radius: 50%;
+            background-color: green;
+            color: #fff;
+            font-size: 22px;
+        }
+
+        span {
+            width: 64px;
+            height: 64px;
+            line-height: 64px;
+            font-size: 18px;
+            z-index: 1;
+            margin: 5px auto;
+
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                -o-object-fit: cover;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+        }
+
+        .jobTitle {
+            font-size: 10pt;
+            margin-bottom: 10px;
+        }
+    }
+}
