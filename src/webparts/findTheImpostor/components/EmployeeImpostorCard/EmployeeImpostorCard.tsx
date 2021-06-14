@@ -32,7 +32,7 @@ const EmployeeImpostorCard: React.FunctionComponent<IEmployeeImpostorCardProps> 
     setVoted(!voted);
 
     props.onCardClicked(props.employee, !voted);
-  }
+  };
 
   return (
     <div className={props.employee.blocked ? styles.employeeBlockedCard : styles.employeeImpostorCard} onClick={onCardClick.bind(this)}>

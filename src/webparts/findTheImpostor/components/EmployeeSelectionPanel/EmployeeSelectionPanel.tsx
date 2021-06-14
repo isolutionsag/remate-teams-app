@@ -21,10 +21,10 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
 
   const _getMembers = async (): Promise<void> => {
     const service = new GraphService(props.graphClient);
-    let members: Array<any> = await service.getGroupMembers(props.group.id);
-    members = await service.appendRandomEmployees(members, 2);
+    let _members: Array<any> = await service.getGroupMembers(props.group.id);
+    _members = await service.appendRandomEmployees(_members, 2);
     
-    setMembers(service.shuffleUsers(members));
+    setMembers(service.shuffleUsers(_members));
   };
 
   React.useEffect(() => {
@@ -68,11 +68,11 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
 
       if (members[i].voted) {
         members[i].blocked = true;
-        _results.push(`${members[i].displayName} was${members[i].impostor? '' : ' not'} an impostor`)
+        _results.push(`${members[i].displayName} was${members[i].impostor? '' : ' not'} an impostor`);
       }
 
       if (!members[i].voted && members[i].impostor) {
-        _remainingResults.push(`${members[i].displayName} was an impostor`)
+        _remainingResults.push(`${members[i].displayName} was an impostor`);
         remaining++;
       }
     }
@@ -141,7 +141,6 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
         minWidth={400}
         onDismiss={() => {
           setShowDialog(!showDialog);
-          //setValidated(false);
         }}
         dialogContentProps={{
           type: DialogType.largeHeader,
@@ -157,7 +156,7 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
               <p>You didn't find all impostors!!!!</p>
               <ul>
                 {remainingResults.map(result => {
-                  return <li>{result}</li>
+                  return <li>{result}</li>;
                 })}
               </ul>
               </>
@@ -168,7 +167,7 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
               <p>Please try again!</p>
               <ul>
                 {results.map(result => {
-                  return <li>{result}</li>
+                  return <li>{result}</li>;
                 })}
               </ul>
             </div>  

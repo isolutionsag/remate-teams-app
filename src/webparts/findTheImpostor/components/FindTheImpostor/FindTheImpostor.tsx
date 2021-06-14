@@ -24,9 +24,9 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
   
   const _getGroups = async (): Promise<void> => {
     const service = new GraphService(props.graphClient);
-    const groups: Array<any> = await service.getAllGroups();
+    const _groups: Array<any> = await service.getAllGroups();
     
-    setGroups(groups);
+    setGroups(_groups);
   };
 
   useEffect(() => {
@@ -37,13 +37,13 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
     _getGroups();
   }, []);
 
-  const selectImpostorsCount = (impostorsCount: number) => {
-    setImpostorsCount(impostorsCount);
-  }
+  const selectImpostorsCount = (_impostorsCount: number) => {
+    setImpostorsCount(_impostorsCount);
+  };
 
   const onChange = (event: React.FormEvent<HTMLDivElement>, item: any) => {
     setSelectedGroup({ id: item.key, mailNickname: item.text });
-  }
+  };
 
   return (
     <div className={styles.findTheImpostor}>
