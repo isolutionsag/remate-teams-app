@@ -5,16 +5,17 @@ import DraggableName from '../DraggableName/DraggableName';
 import IUserItem from 'data/IUserItem';
 import { IFaceMatcherProps } from './IFaceMatcherProps';
 import { GraphService } from 'services/GraphService';
-import TenantService from 'services/TenantService';
 import RankingService from 'services/RankingService';
 import IResult from 'data/IResult';
 import EmployeeCard from '../EmployeeCard/EmployeeCard';
 import { useEffect, useState } from 'react';
+import Ranking from '../Ranking/Ranking';
 
 const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
 
   const NUMBER_OF_EMPLOYEES: number = 4;
 
+  const [currentUser, setCurrentUser] = useState(null);
   const [shuffledUsers, setShuffledUsers] = useState([]);
   const [assignedEmployees, setAssignedEmployees] = useState([]);
   const [results, setResults] = useState([]);
@@ -23,15 +24,26 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
   const [attempts, setAttempts] = useState(0);
   const [showDialog, setShowDialog] = useState(false);
 
+  const _getCurrentUser = async (): Promise<void> => {
+    const graphService = new GraphService(props.graphClient);
+    const user: IUserItem = await graphService.getCurrentUserProfile();
+
+    setCurrentUser(user);
+  };
+
   const _getEmployees = async (): Promise<void> => {
     const graphService = new GraphService(props.graphClient);
-
     const users: Array<IUserItem> = await graphService.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
 
     const _shuffledUsers = await graphService.shuffleUsers(users);
+
     setShuffledUsers(_shuffledUsers);
     setResults(users.map(x => { return { employee: x, valid: false, completed: false }; }));
   };
+
+  useEffect(() => {
+    _getCurrentUser();
+  }, []);
 
   useEffect(() => {
     _getEmployees();
@@ -53,9 +65,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
         break;
     }
 
-    const tenantService = new TenantService(props.context);
-    const storage = await tenantService.getStorageKey('RemateTeamsApp-SPUrl');
-    const rankingService = new RankingService(props.context, storage); 
+    const rankingService = new RankingService(props.graphClient);
     rankingService.addPointsToCurrentUser(points);
   };
 
@@ -98,7 +108,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
       <p>
         Welcome to the <strong>WHO'S WHO game</strong>. Do you know your mates' faces or at least what they look like?
         This is a drag & drop game in which you have to drag the names of each person under their
-        respective heads and then click on the <span className={styles.button}><Icon iconName='SkypeCheck' /> Check</span> button
+        respective heads and then click on the <span className={styles.button}><Icon iconName='SkypeCheck' /> Confirm</span> button
         below to check your answers.
       </p>
       <p>
@@ -144,7 +154,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
       <div className={styles.buttons}>
         <PrimaryButton
           iconProps={{ iconName: 'SkypeCheck' }}
-          text='Check'
+          text='Confirm'
           disabled={assignedEmployees.length !== NUMBER_OF_EMPLOYEES || completed}
           onClick={validateResults.bind(this)}
         />
@@ -156,17 +166,33 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
         />
       </div>
 
+      {currentUser &&
+      <Ranking graphClient={props.graphClient} currentUser={currentUser} />}
+
       <Dialog
         hidden={!showDialog}
+        minWidth={400}
         onDismiss={() => {
           setShowDialog(!showDialog);
           setValidated(false);
         }}
         dialogContentProps={{
-          type: DialogType.normal,
-          title: completed ? 'CONGRATULATIONS' : 'OUPS...',
-          subText: completed ? 'You have found all your teammates!' : 'Some of the answers are wrong, try again!',
+          type: DialogType.largeHeader,
+          title: completed ? 
+            <span><Icon iconName='Trophy2Solid' /> CONGRATULATIONS</span> : 
+            <span><Icon iconName='SadSolid' /> OUPS...</span>
         }}>
+          {completed ?
+            <div className={styles.popupContent}>
+              <p>You have found all your teammates!</p>
+              <p>Now you can see more information about them below.</p>
+              <p>Check it out and don't hesitate to reach out</p>
+            </div>
+            :
+            <div className={styles.popupContent}>
+              <p>Some of the answers are wrong, try again!</p>
+            </div>  
+          }
       </Dialog>
     </div>
   );

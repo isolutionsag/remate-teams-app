@@ -1,79 +1,111 @@
-import { WebPartContext } from "@microsoft/sp-webpart-base";
-import { IWeb, sp, Web } from "@pnp/sp/presets/all";
-import { ISiteUserInfo } from "@pnp/sp/site-users/types";
-import IRankingItem from "data/IRankingItem";
+import { MSGraphClient } from '@microsoft/sp-http';
+import IRankingItem from 'data/IRankingItem';
 
 export default class RankingService {
-    public constructor(private context: WebPartContext, private url) {
-        sp.setup({
-            spfxContext: this.context
+    constructor(private client: MSGraphClient) {}
+
+    public async getFullRanking(): Promise<Array<IRankingItem>> {
+
+        const res = await this.client
+            .api("users")
+            .version("v1.0")
+            .select("Id,mail,displayName,jobTitle")
+            .expand("extensions($filter=id eq 'com.onmicrosoft.isdmartos.remateData')")
+            .get();
+
+        if (!res) {
+            return Promise.reject("No results have been fetched");
+        }
+
+        const rankedUsers: Array<IRankingItem> = res.value
+            .map(user => {
+                let points: number = 0;
+                let attempts: number = 0;
+
+                if (user.extensions && user.extensions.length > 0) {
+                    points = user.extensions[0].faceMatcherPoints;
+                    attempts = user.extensions[0].faceMatcherAttempts;
+                }
+
+                return {
+                    rankedPoints: points,
+                    rankedGames: attempts,
+                    user: {
+                        id: user.id,
+                        displayName: user.displayName,
+                        mail: user.mail,
+                        jobTitle: user.jobTitle,
+                        initials: user.displayName.match(/\b(\w)/g).join('').substr(0, 2)                  
+                    }
+                };
+            })
+            .sort((a, b) => { return a.rankedPoints < b.rankedPoints ? 1: -1; } );
+        
+        return rankedUsers.map((ranking: IRankingItem, index: number) => {
+            let original = ranking;
+            original.position = index + 1;
+            
+            return ranking;
         });
     }
 
-    public async addPointsToCurrentUser(points: number): Promise<void> {
+    public async addPointsToCurrentUser(points: number): Promise<any> {
+        const res: IRankingItem = await this.getCurrentUserRanking();
 
-        const _web = Web(this.url);
-
-        const currentUser = await this.getCurrentUser(_web);
-
-        var ranking = await this.getRankingByEmployee(_web, currentUser);
-
-        if (ranking) {
-            await this.updateRankingItem(_web, ranking, points);
+        if (res) {
+            await this.updateRankingForCurrentUser(res, points);
         } else {
-            await this.addRankingItem(_web, currentUser.Id, points);
+            await this.createRankingForCurrentUser(points);
         }
     }
 
-    private async getCurrentUser(_web: IWeb): Promise<ISiteUserInfo> {
-        return await _web.currentUser.get();
-    }
+    private async getCurrentUserRanking(): Promise<IRankingItem> {
+        const res = await this.client
+            .api("me")
+            .version("v1.0")
+            .expand("extensions")
+            .select("id,displayName,mail,userPrincipalName,jobTitle,officeLocation")
+            .get(); 
 
-    private async getRankingByEmployee(_web: IWeb, user: ISiteUserInfo): Promise<IRankingItem> {
-        const results = await _web.lists.getByTitle('Remate-Ranking').renderListDataAsStream({
-            ViewXml: `
-                <View>
-                    <ViewFields>
-                        <FieldRef Name="ID" />
-                        <FieldRef Name="RankedEmployee" />
-                        <FieldRef Name="RankedPoints" />
-                        <FieldRef Name="RankedGames" />
-                    </ViewFields>
-                    <RowLimit>1</RowLimit>
-                    <Query>
-                        <Where>
-                            <Eq>
-                                <FieldRef Name="RankedEmployee" LookupId="TRUE"/>
-                                <Value Type="Integer">${user.Id}</Value>
-                            </Eq>
-                        </Where>
-                    </Query>
-                </View>` 
-        });
+        if (!res) {
+          return Promise.reject("No results have been fetched");
+        }
 
-        if (results.Row.length === 0) {
+        if (!res.extensions) {
+            return null;
+        }
+
+        const validExtensions = res.extensions.filter(ext => ext.id === "com.onmicrosoft.isdmartos.remateData");
+        if (validExtensions.length === 0) {
             return null;
         }
 
         return {
-            id: results.Row[0]["ID"],
-            rankedPoints: parseInt(results.Row[0]["RankedPoints"]),
-            rankedGames: parseInt(results.Row[0]["RankedGames"])
+            rankedGames: validExtensions[0].faceMatcherAttempts,
+            rankedPoints: validExtensions[0].faceMatcherPoints
         };
+
     }
 
-    private async updateRankingItem(_web: IWeb, ranking: IRankingItem, points: number) {
-        await _web.lists.getByTitle('Remate-Ranking').items.getById(ranking.id).update({
-            'RankedPoints': points + ranking.rankedPoints,
-            'RankedGames': ranking.rankedGames + 1
-        });
+    private async createRankingForCurrentUser(points: number): Promise<void> {
+        await this.client
+            .api("me/extensions")
+            .version("v1.0")
+            .post({
+                "@odata.type": "microsoft.graph.openTypeExtension",
+                "extensionName": "com.onmicrosoft.isdmartos.remateData",
+                "faceMatcherAttempts": 1,
+                "faceMatcherPoints": points
+            }); 
     }
 
-    private async addRankingItem(_web: IWeb, userId: number, points: number) {
-        await _web.lists.getByTitle('Remate-Ranking').items.add({
-            'RankedEmployeeId': userId,
-            'RankedPoints': points,
-            'RankedGames': 1
-        });
+    private async updateRankingForCurrentUser(previousRanking: IRankingItem, points: number): Promise<void> {
+        await this.client
+            .api("me/extensions/com.onmicrosoft.isdmartos.remateData")
+            .version("v1.0")
+            .patch({
+                "faceMatcherAttempts": previousRanking.rankedGames + 1,
+                "faceMatcherPoints": previousRanking.rankedPoints + points
+            }); 
     }
 }

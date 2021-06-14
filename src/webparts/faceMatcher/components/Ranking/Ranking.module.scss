@@ -1,0 +1,206 @@
+  .rankingCrown {
+    cursor: pointer;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 2;
+
+
+    .containerAvatar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      font-weight: bold;
+      font-family: "Open Sans", sans-serif;
+      letter-spacing: 2px;
+
+      .containerRankingCrownIcon {
+        border: 1px solid #833ab4;
+        border-radius: 50%;
+        padding: 1px;
+
+        :global {
+          .ant-avatar {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            color: rgba(0,0,0,.85);
+            font-size: 14px;
+            font-variant: tabular-nums;
+            line-height: 1.5715;
+            list-style: none;
+            -webkit-font-feature-settings: "tnum";
+            font-feature-settings: "tnum","tnum";
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
+            background: #ccc;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            border-radius: 50%;
+        }
+        }
+
+        .rankingCrownIcon {
+          background: linear-gradient(
+            180deg,
+            rgba(85, 69, 150, 1) 0%,
+            rgba(200, 53, 126, 1) 50%,
+            rgba(218, 134, 61, 1) 100%
+          );
+          display: flex !important;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid;
+          transition: 0.3s;
+        
+          &:hover {
+            opacity: 0.8;
+            transform: scale(1.1);
+          }
+        }
+
+      }
+
+    }
+
+    .containerLetters {
+      display: flex;
+
+      span {
+        display: block;
+      }
+
+      .letter1 {
+        transform: translate(4px, -15px) rotate(60deg);
+      }
+    
+      .letter2 {
+        transform: translate(0px, -5px) rotate(45deg);
+      }
+    
+      .letter3 {
+        transform: translate(0px, 0px) rotate(15deg);
+      }
+    
+      .letter4 {
+        transform: translate(0px, 2px) rotate(0deg);
+      }
+    
+      .letter5 {
+        transform: translate(0px, 0px) rotate(-15deg);
+      }
+    
+      .letter6 {
+        transform: translate(0px, -5px) rotate(-45deg);
+      }
+    
+      .letter7 {
+        transform: translate(-4px, -16px) rotate(-60deg);
+      }
+    }  
+}
+
+.dialogContainer {
+  max-height: 700px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 20px;
+  padding-left: 20px;
+  text-align: center;
+
+  .dividerContainer {
+
+    width: 90%;
+  display: flex;
+  margin: auto;
+  align-items: center;
+    .divider {
+  
+      display: -ms-flexbox;
+      display: flex;
+      width: 100%;
+      color: rgba(0,0,0,.85);
+      font-weight: 500;
+      font-size: 16px;
+      white-space: nowrap;
+      text-align: center;
+      border-top: 0;
+      border-top-color: rgba(0,0,0,.06);
+  
+      .dividerText {
+        margin-bottom: .5rem;
+        display: inline-block;
+        padding: 0 1em;
+  
+        
+      }
+  
+      &::before, &::after {
+        position: relative;
+        top: 50%;
+        width: 50%;
+        border-top: 1px solid transparent;
+        border-top-color: inherit;
+        border-bottom: 0;
+        -webkit-transform: translateY(50%);
+        transform: translateY(50%);
+        content: "";
+      }
+  
+      
+    }
+  }
+  
+  
+  .rankingUserContainer {
+      display: flex;
+      align-items: center;
+      border: 1px solid #d3d3d3;
+      border-radius: 2px;
+      padding: .5rem;
+      margin: .5rem 0;
+      background-color: #fff;
+      transition: .3s;
+  
+      .medal {
+        display: flex;
+        justify-content: center;
+        font-size: 20px;
+        margin: 0 .4rem 0 0;
+        min-width: 33px;
+      }
+  
+      .pictureContainer {
+        background: linear-gradient(45deg,#554596,#c8357e,#de9630);
+        border-radius: 50%;
+        padding: 1px;
+  
+        img {
+          width: 50px;
+          border-radius: 50%;
+        }
+      }
+  
+      .rankingContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+  
+        p {
+          margin: 0 1rem;
+          font-size: 12px;
+          flex: 1 1;
+        }
+      }
+  }
+}
+

@@ -6,6 +6,22 @@ export class GraphService {
 
     constructor(private client: MSGraphClient) {}
 
+    public async getCurrentUserProfile(): Promise<IUserItem> {
+        const res = await this.client
+            .api("me")
+            .version("v1.0")
+            .select("id,displayName,mail,userPrincipalName,jobTitle,officeLocation")
+            .get(); 
+
+        if (!res) {
+            return Promise.reject("No results have been fetched");
+        }
+
+        const result: IUserItem = this.mapUserData(res);
+
+        return Promise.resolve(result);
+    }
+
     public async getRandomEmployeesList(count: number): Promise<Array<IUserItem>> {
         
         const res = await this.client
@@ -22,6 +38,7 @@ export class GraphService {
         let totalItems = Math.min(count, result.length);
 
         var users: Array<IUserItem> = new Array<IUserItem>();
+        
         while (users.length < totalItems) {
 
             const random = Math.floor(Math.random() * result.length);

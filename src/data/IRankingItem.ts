@@ -1,5 +1,8 @@
+import IUserItem from "./IUserItem";
+
 export default interface IRankingItem {
-  id: number;
   rankedPoints: number;
   rankedGames: number;
+  user?: IUserItem;
+  position?: number;
 }
