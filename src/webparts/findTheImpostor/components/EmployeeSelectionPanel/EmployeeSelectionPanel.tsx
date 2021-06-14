@@ -2,79 +2,179 @@ import * as React from 'react';
 import styles from './EmployeeSelectionPanel.module.scss';
 import { IEmployeeSelectionPanelProps } from './IEmployeeSelectionPanelProps';
 import { GraphService } from 'services/GraphService';
-import { IEmployeeSelectionPanelState } from './IEmployeeSelectionPanelState';
 import EmployeeImpostorCard from '../EmployeeImpostorCard/EmployeeImpostorCard';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton, Dialog, DialogType, Icon, useFocusRects, ZIndexes } from 'office-ui-fabric-react';
 import IUserItem from 'data/IUserItem';
+import { useState } from 'react';
+import RankingService from 'services/RankingService';
 
-export default class EmployeeSelectionPanel extends React.Component<IEmployeeSelectionPanelProps, IEmployeeSelectionPanelState> {
 
-  private graphService: GraphService;
+const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelProps> = props => {
 
-  constructor(props: IEmployeeSelectionPanelProps) {
-    super(props);
+  const [remainingImpostors, setRemainingImpostors] = useState(0);
+  const [attempts, setAttempts] = useState(0);
+  const [members, setMembers] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [results, setResults] = useState([]);
+  const [remainingResults, setRemainingResults] = useState([]);
+
+  const _getMembers = async (): Promise<void> => {
+    const service = new GraphService(props.graphClient);
+    let members: Array<any> = await service.getGroupMembers(props.group.id);
+    members = await service.appendRandomEmployees(members, 2);
     
-    this.graphService = new GraphService(this.props.graphClient);
+    setMembers(service.shuffleUsers(members));
+  };
 
-    this.state = {
-      members: [],
-      remainingImpostors: this.props.impostorsCount,
-      attempts: 0
-    };
+  React.useEffect(() => {
+    setRemainingImpostors(props.impostorsCount);
+    _getMembers();
+  }, []);
 
-  }
+  const cardClicked = (employee: IUserItem, voted: boolean) => {
+    setRemainingImpostors(remainingImpostors + (voted ? -1 : 1));
+    const position = members.map(x => x.id).indexOf(employee.id);
+    members[position].voted = voted;
+    setMembers(members);
+  };
 
-  public async componentDidMount(): Promise<void> {
+  const updateRanking = async () => {
 
-    if (!this.props.graphClient || !this.props.group ) {
-      return;
+    let points: number = 1;
+    switch (attempts) {
+      case 0:
+        points = 3;
+        break;
+      case 1:
+        points = 2;
+        break;
     }
 
-    let members: Array<any> = await this.graphService.getGroupMembers(this.props.group.id);
-    members = await this.graphService.addRandomEmployees(members, 2);
+    const rankingService = new RankingService(props.graphClient);
+    rankingService.addPointsToCurrentUser(points);
+  };
+
+  const process = async () => {
+    let remaining = 0;
+    let _results = [];
+    let _remainingResults = [];
+    let _completed = false;
+    for (let i = 0; i < members.length; i++) {
+
+      if (members[i].blocked) {
+        continue;
+      }
+
+      if (members[i].voted) {
+        members[i].blocked = true;
+        _results.push(`${members[i].displayName} was${members[i].impostor? '' : ' not'} an impostor`)
+      }
+
+      if (!members[i].voted && members[i].impostor) {
+        _remainingResults.push(`${members[i].displayName} was an impostor`)
+        remaining++;
+      }
+    }
+
+    setResults(_results);
+    setRemainingResults(_remainingResults);
+
+    if (remaining > 0) {
+      setAttempts(attempts + 1);
+    } else {
+      _completed = true;
+    }
+
+    if (attempts === 2) {
+      _completed = true;
+    }
+
+    if (_completed && remaining === 0) {
+      await updateRanking();
+    }
+
+    setCompleted(_completed);
+    setRemainingImpostors(remaining);
+    setShowDialog(true);
+  };
+
+  return (
+    <div className={styles.employeeSelectionPanel}>
     
-    this.setState({
-      members: members
-    });
+    
+    {completed ?
+    <>
+      <DefaultButton text='Click here to play again' onClick={() => window.location.reload()} />
+    </>
+    :
+    <>
+    <p>Select the crew members you suspect are the impostors for
+      the group: <strong>{props.group.mailNickname}</strong>
+    </p>
+    <div className={styles.counters}>
+      <p>Remaining impostors: {remainingImpostors}</p>
+      <p>Attempts: {attempts}</p>
+    </div>
+    <div className={styles.employeeSelectionGrid}>
+        {members.map(member => {
+        return <EmployeeImpostorCard
+          graphClient={props.graphClient}
+          employee={member} 
+          remainingImpostors={remainingImpostors}
+          onCardClicked={cardClicked.bind(this)}
+          />;
+        })}
+    </div>
 
-  }
+    <DefaultButton
+      text='Process' 
+      disabled={remainingImpostors > 0}
+      onClick={process.bind(this)} />
 
-  public render(): React.ReactElement<IEmployeeSelectionPanelProps> {
-    return (
-        <div className={styles.employeeSelectionPanel}>
-          <p>Select the crew members you suspect are the impostors for
-            the group: <strong>{this.props.group.mailNickname}</strong>
-          </p>
-          <div className={styles.counters}>
-            <p>Impostor remaining: {this.state.remainingImpostors}</p>
-            <p>Attempts: {this.state.attempts}</p>
-          </div>
-          <div className={styles.employeeSelectionGrid}>
-              {this.state.members.map(member => {
-              return <EmployeeImpostorCard
-                graphClient={this.props.graphClient}
-                employee={member} 
-                remainingImpostors={this.state.remainingImpostors}
-                onCardClicked={this.cardClicked.bind(this)}
-                />;
-              })}
-          </div>
-          <DefaultButton
-            text='Process' 
-            disabled={this.state.remainingImpostors > 0}
-            onClick={this.process.bind(this)} />
-        </div>
-      
-    );
-  }
-
-  private cardClicked(employee: IUserItem, voted: boolean) {
-    this.setState({
-      remainingImpostors: this.state.remainingImpostors + (voted ? -1 : 1)
-    });
-  }
-
-  private process() {
-    alert("process");
-  }
-}
+    
+      </>
+    }
+        
+    <Dialog
+        hidden={!showDialog}
+        minWidth={400}
+        onDismiss={() => {
+          setShowDialog(!showDialog);
+          //setValidated(false);
+        }}
+        dialogContentProps={{
+          type: DialogType.largeHeader,
+          title: completed && remainingImpostors === 0 ? 
+            <span><Icon iconName='Trophy2Solid' /> CONGRATULATIONS</span> : 
+            <span><Icon iconName='SadSolid' /> OUPS...</span>
+        }}>
+          {completed ?
+            <div className={styles.popupContent}>
+              {remainingImpostors === 0 ?
+              <p>You found all impostors!!!!</p> :
+              <>
+              <p>You didn't find all impostors!!!!</p>
+              <ul>
+                {remainingResults.map(result => {
+                  return <li>{result}</li>
+                })}
+              </ul>
+              </>
+              }
+            </div>
+            :
+            <div className={styles.popupContent}>
+              <p>Please try again!</p>
+              <ul>
+                {results.map(result => {
+                  return <li>{result}</li>
+                })}
+              </ul>
+            </div>  
+          }
+      </Dialog>
+  </div> 
+  );
+};
+export default EmployeeSelectionPanel;

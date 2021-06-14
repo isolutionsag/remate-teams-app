@@ -24,6 +24,7 @@ Who's who game for Teams
     * Permissions
         * Microsoft Graph -> User.Read.All
         * Microsoft Graph -> User.ReadWrite
+        * Microsoft Graph -> GroupMember.Read.All
 
 ## Solution
 

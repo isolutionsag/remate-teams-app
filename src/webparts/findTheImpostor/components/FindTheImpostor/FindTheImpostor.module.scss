@@ -15,9 +15,16 @@
 }
 
 .findTheImpostor {
-  font-size: 15pt;
-  letter-spacing: 2px;
-  text-align: center;
+  font-family: "Segoe UI",system-ui,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+
+  p {
+    line-height: 40px;
+    font-size: 17px;
+    font-weight: 500;
+  }
 
   .numberOfImpostorSelector {
     display: flex;
@@ -48,4 +55,14 @@
     }
   }
 
+  .groupsListContainer {
+    text-align: center;
+
+
+    .groupsList {
+      text-align: left;
+      width: 500px;
+      margin: 0 auto
+    }
+  }
 }

@@ -7,4 +7,6 @@ export default interface IUserItem {
     jobTitle?: string;
     officeLocation?: string;
     impostor?: boolean;
+    voted?: boolean;
+    blocked?: boolean;
   }

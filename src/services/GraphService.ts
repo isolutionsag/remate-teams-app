@@ -128,7 +128,7 @@ export class GraphService {
         return Promise.resolve(result);
     }
 
-    public async addRandomEmployees(groupMembers: Array<IUserItem>, numberToAdd: number) {
+    public async appendRandomEmployees(groupMembers: Array<IUserItem>, numberToAdd: number) {
         const allEmployeesRaw = await this.client
             .api("users")
             .version("v1.0")
@@ -163,7 +163,7 @@ export class GraphService {
             added ++;
         }
 
-        return Promise.resolve(this.shuffleUsers(users));
+        return Promise.resolve(users);
 
     }
 

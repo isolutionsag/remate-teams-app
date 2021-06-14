@@ -9,7 +9,7 @@ import RankingService from 'services/RankingService';
 import IResult from 'data/IResult';
 import EmployeeCard from '../EmployeeCard/EmployeeCard';
 import { useEffect, useState } from 'react';
-import Ranking from '../Ranking/Ranking';
+import Ranking from '../../../shared/Ranking/Ranking';
 
 const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
 

@@ -1,79 +1,59 @@
 import * as React from 'react';
 import styles from './EmployeeImpostorCard.module.scss';
 import { IEmployeeImpostorCardProps } from './IEmployeeImpostorCardProps';
-import { escape } from '@microsoft/sp-lodash-subset';
 import { GraphService } from 'services/GraphService';
-import { IEmployeeImpostorCardState } from './IEmployeeImpostorCardState';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react';
+import { useEffect, useState } from 'react';
 
-export default class EmployeeImpostorCard extends React.Component<IEmployeeImpostorCardProps, IEmployeeImpostorCardState> {
+const EmployeeImpostorCard: React.FunctionComponent<IEmployeeImpostorCardProps> = props => {
 
-  private graphService: GraphService;
+  const [image, setImage] = useState("");
+  const [voted, setVoted] = useState(false);
 
-  constructor(props: IEmployeeImpostorCardProps) {
-    super(props);
+  const _getImage = async (): Promise<void> => {
+    const service = new GraphService(props.graphClient);
+    const photo = await service.getEmployeePhoto(props.employee.id);
+    setImage(photo);
+  };
+
+  useEffect(() => {
+    _getImage();
+  }, []);
+
+  const onCardClick = () => {
+
+    if (props.employee.blocked) {
+      return;
+    }
+
+    if (props.remainingImpostors === 0 && !voted) {
+      return;
+    }
+
+    setVoted(!voted);
+
+    props.onCardClicked(props.employee, !voted);
+  }
+
+  return (
+    <div className={props.employee.blocked ? styles.employeeBlockedCard : styles.employeeImpostorCard} onClick={onCardClick.bind(this)}>
     
-    this.graphService = new GraphService(this.props.graphClient);
+    {voted &&
+    <div className={styles.votedOverlay}></div>}
 
-    this.state = {
-      image: null,
-      voted: false
-    };
-
-  }
-
-  public async componentDidMount(): Promise<void> {
-
-    if (!this.props.graphClient || !this.props.employee) {
-      return;
-    }
-
-    try {
-      const photo = await this.graphService.getEmployeePhoto(this.props.employee.id);
-
-      this.setState({
-          image: photo
-      });  
-    }
-    catch {
-      console.error("No user image found");
-    }
-  }
-
-  public render(): React.ReactElement<IEmployeeImpostorCardProps> {
-    return (
-      <div className={styles.employeeImpostorCard} onClick={this.onCardClick.bind(this)}>
-        {this.state.voted &&
-        <div className={styles.votedOverlay}></div>
-        }
-        <div className={styles.container}>
-          <span>
-            {this.state.image ?
-            <img src={this.state.image} /> :
-            <div className={styles.initials}>{this.props.employee.initials}</div>
-            }
-          </span>
-          
-          {this.props.employee.displayName}
-          <div className={styles.jobTitle}>
-            {this.props.employee.jobTitle}
-          </div>
-        </div>
-       
-      </div>
+    <div className={styles.container}>
+      <span>
+        {image ?
+        <img src={image} /> :
+        <div className={styles.initials}>{props.employee.initials}</div>}
+      </span>
       
-    );
-  }
-
-  private onCardClick() {
-    if (this.props.remainingImpostors === 0 && !this.state.voted) {
-      return;
-    }
-
-    this.setState({
-      voted: !this.state.voted
-    });
-
-    this.props.onCardClicked(this.props.employee, !this.state.voted);
-  }
-}
+      {props.employee.displayName}
+      <div className={styles.jobTitle}>
+        {props.employee.jobTitle}
+      </div>
+    </div>
+   
+  </div>
+  );
+};
+export default EmployeeImpostorCard;
