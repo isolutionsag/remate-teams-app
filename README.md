@@ -1,10 +1,10 @@
-# SPFx(SharePoint Framework) APP
+# REMATE Teams SPFx (SharePoint Framework) APP
 
 ## Summary
 
-Short summary on functionality and used technologies.
+Who's who game for Teams
 
-[picture of the solution in action, if possible]
+![image](https://user-images.githubusercontent.com/85878792/121888006-c0f29f80-cd17-11eb-8eb6-7c81757bd956.png)
 
 ## Used SharePoint Framework Version
 
