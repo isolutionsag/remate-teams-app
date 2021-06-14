@@ -2,9 +2,16 @@
 
 ## Summary
 
-Who's who game for Teams
+This app contains a set of games you can deploy in your organization so your colleagues get to know better their peers. This might be quite useful for companies operating in different offices or for organizations having a considerable amount of remote workers.
+
+### Who's who game for Teams
 
 ![image](https://user-images.githubusercontent.com/85878792/121888006-c0f29f80-cd17-11eb-8eb6-7c81757bd956.png)
+
+### Find the Impostor game for Teams
+
+![image](https://user-images.githubusercontent.com/85878792/121928350-586be880-cd40-11eb-80c8-aae94f74da23.png)
+
 
 ## Used SharePoint Framework Version
 
