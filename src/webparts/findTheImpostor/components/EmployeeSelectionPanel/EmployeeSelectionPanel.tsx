@@ -22,7 +22,7 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
   const _getMembers = async (): Promise<void> => {
     const service = new GraphService(props.graphClient);
     let _members: Array<any> = await service.getGroupMembers(props.group.id);
-    _members = await service.appendRandomEmployees(_members, 2);
+    _members = await service.appendRandomEmployees(_members, props.impostorsCount);
     
     setMembers(service.shuffleUsers(_members));
   };
