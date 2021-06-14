@@ -19,19 +19,22 @@ Short summary on functionality and used technologies.
 
 ## Prerequisites
 
-> Any special pre-requisites?
+* Office 365 tenant
+* App configuration in Azure Active Directory (AAD)
+    * Permissions
+        * Microsoft Graph -> User.Read.All
+        * Microsoft Graph -> User.ReadWrite
 
 ## Solution
 
 Solution|Author(s)
 --------|---------
-folder name | Author details (name, company, twitter alias with link)
+RemateTeamsApp | David Martos (isolutions AG, @davidmartos)
 
 ## Version history
 
 Version|Date|Comments
 -------|----|--------
-1.1|March 10, 2021|Update comment
 1.0|January 29, 2021|Initial release
 
 ## Disclaimer
@@ -69,17 +72,7 @@ Click the item and select `Publish` in the Publishing status.
 
 ## Features
 
-Description of the extension that expands upon high-level summary above.
-
-This extension illustrates the following concepts:
-
-- topic 1
-- topic 2
-- topic 3
-
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
-
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
+This Teams app let's you play the well-known who's who game, showing a list of 4 random faces from your organization and asking you to drag one name into each one of them. You will get a score depending on how many attempts you need to match all employees with their right name. A ranking will be available so you can compare your performance with your peers.
 
 ## References
 
