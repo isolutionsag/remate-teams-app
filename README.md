@@ -1,4 +1,4 @@
-# REMATE Teams SPFx(SharePoint Framework) APP
+# REMATE Teams SPFx (SharePoint Framework) APP
 
 ## Summary
 
