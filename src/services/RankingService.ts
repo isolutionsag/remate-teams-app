@@ -6,7 +6,7 @@ export default class RankingService {
 
     public async getFullRanking(): Promise<Array<IRankingItem>> {
 
-        const res = await this.client
+        let res = await this.client
             .api("users")
             .version("v1.0")
             .select("Id,mail,displayName,jobTitle")
@@ -17,7 +17,14 @@ export default class RankingService {
             return Promise.reject("No results have been fetched");
         }
 
-        const rankedUsers: Array<IRankingItem> = res.value
+        let result: any[] = res.value.slice();
+
+        while (res["@odata.nextLink"]) {
+            res = await this.client.api(res["@odata.nextLink"]).get();
+            result = result.concat(res.value);
+        }
+
+        const rankedUsers: Array<IRankingItem> = result
             .map(user => {
                 let points: number = 0;
                 let attempts: number = 0;
@@ -64,7 +71,7 @@ export default class RankingService {
             .api("me")
             .version("v1.0")
             .expand("extensions")
-            .select("id,displayName,mail,userPrincipalName,jobTitle,officeLocation")
+            .select("id,displayName,mail,jobTitle,officeLocation")
             .get(); 
 
         if (!res) {
