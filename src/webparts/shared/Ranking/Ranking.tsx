@@ -6,21 +6,34 @@ import { useEffect, useState } from 'react';
 import RankingService from 'services/RankingService';
 import IRankingItem from 'data/IRankingItem';
 import RankingItem from '../RankingItem/RankingItem';
+import GraphService from 'services/GraphService';
+import IUserItem from 'data/IUserItem';
 
 const Ranking: React.FunctionComponent<IRankingProps> = props => {
 
+  const [currentUser, setCurrentUser] = useState(null);
   const [rankedUsers, setRankedUsers] = useState([]);
   const [winners, setWinners] = useState([]);
   const [relativeToUser, setRelativeToUser] = useState([]);
   const [showRanking, setShowRanking] = useState(false);
   const [showFullRanking, setShowFullRanking] = useState(false);
 
+  const _getCurrentUser = async (): Promise<void> => {
+    const graphService = new GraphService(props.graphClient);
+    const user: IUserItem = await graphService.getCurrentUserProfile();
+
+    setCurrentUser(user);
+  };
+
+  useEffect(() => {
+    _getCurrentUser();
+  }, []);
 
   const _showRanking = async (): Promise<void> => {
     const rankingService = new RankingService(props.graphClient);
     const fullRanking: Array<IRankingItem> = await rankingService.getFullRanking();
 
-    const currentUserPosition: number = fullRanking.map(ranking => ranking.user.id).indexOf(props.currentUser.id) + 1;
+    const currentUserPosition: number = fullRanking.map(ranking => ranking.user.id).indexOf(currentUser.id) + 1;
 
     if (currentUserPosition < 7) {
       setWinners(fullRanking.slice(0, 6));
@@ -77,7 +90,7 @@ const Ranking: React.FunctionComponent<IRankingProps> = props => {
             rankedUsers.map((ranking: IRankingItem, index: number) => {
 
               return <RankingItem
-                isCurrentUser={props.currentUser.id === ranking.user.id}
+                isCurrentUser={currentUser.id === ranking.user.id}
                 graphClient={props.graphClient}
                 rankingInfo={ranking}
                 position={ranking.position} />;
@@ -88,7 +101,7 @@ const Ranking: React.FunctionComponent<IRankingProps> = props => {
               {winners.map((ranking: IRankingItem) => {
 
                 return <RankingItem
-                  isCurrentUser={props.currentUser.id === ranking.user.id}
+                  isCurrentUser={currentUser.id === ranking.user.id}
                   graphClient={props.graphClient}
                   rankingInfo={ranking}
                   position={ranking.position} />;
@@ -105,7 +118,7 @@ const Ranking: React.FunctionComponent<IRankingProps> = props => {
                   {relativeToUser.map((ranking: IRankingItem, index: number) => {
 
                     return <RankingItem
-                      isCurrentUser={props.currentUser.id === ranking.user.id}
+                      isCurrentUser={currentUser.id === ranking.user.id}
                       graphClient={props.graphClient}
                       rankingInfo={ranking}
                       position={ranking.position} />;

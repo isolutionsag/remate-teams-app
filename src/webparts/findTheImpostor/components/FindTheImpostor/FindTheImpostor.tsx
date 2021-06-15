@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './FindTheImpostor.module.scss';
 import { IFindTheImpostorProps } from './IFindTheImpostorProps';
-import { GraphService } from 'services/GraphService';
+import GraphService from 'services/GraphService';
 import { Dropdown } from 'office-ui-fabric-react';
 import EmployeeSelectionPanel  from '../EmployeeSelectionPanel/EmployeeSelectionPanel';
 import { useEffect, useState } from 'react';
@@ -10,17 +10,9 @@ import IUserItem from 'data/IUserItem';
 
 const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props => {
 
-  const [currentUser, setCurrentUser] = useState(null);
   const [impostorsCount, setImpostorsCount] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [groups, setGroups] = useState([]);
-
-  const _getCurrentUser = async (): Promise<void> => {
-    const graphService = new GraphService(props.graphClient);
-    const user: IUserItem = await graphService.getCurrentUserProfile();
-
-    setCurrentUser(user);
-  };
   
   const _getGroups = async (): Promise<void> => {
     const service = new GraphService(props.graphClient);
@@ -28,10 +20,6 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
     
     setGroups(_groups);
   };
-
-  useEffect(() => {
-    _getCurrentUser();
-  }, []);
 
   useEffect(() => {
     _getGroups();
@@ -77,8 +65,8 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
         group={selectedGroup} 
         impostorsCount={impostorsCount}/>
     }
-     {currentUser &&
-      <Ranking graphClient={props.graphClient} currentUser={currentUser} />}
+
+    <Ranking graphClient={props.graphClient} />
  
   </div>
   );

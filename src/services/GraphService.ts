@@ -2,7 +2,7 @@ import { MSGraphClient } from '@microsoft/sp-http';
 import IGroupItem from 'data/IGroupItem';
 import IUserItem from 'data/IUserItem';
 
-export class GraphService {
+export default class GraphService {
 
     constructor(private client: MSGraphClient) {}
 
@@ -10,11 +10,11 @@ export class GraphService {
         const res = await this.client
             .api("me")
             .version("v1.0")
-            .select("id,displayName,mail,userPrincipalName,jobTitle,officeLocation")
+            .select("id,displayName,mail,jobTitle,officeLocation")
             .get(); 
 
         if (!res) {
-            return Promise.reject("No results have been fetched");
+            return Promise.reject("Current user profile not found");
         }
 
         const result: IUserItem = this.mapUserData(res);
@@ -24,10 +24,10 @@ export class GraphService {
 
     public async getRandomEmployeesList(count: number): Promise<Array<IUserItem>> {
         
-        const res = await this.client
+        let res = await this.client
             .api("users")
             .version("v1.0")
-            .select("id,displayName,mail,userPrincipalName,jobTitle,officeLocation")
+            .select("id,displayName,mail,jobTitle,officeLocation")
             .get(); 
 
         if (!res) {
@@ -35,6 +35,12 @@ export class GraphService {
         }
 
         let result: any[] = res.value.slice();
+
+        while (res["@odata.nextLink"]) {
+            res = await this.client.api(res["@odata.nextLink"]).get();
+            result = result.concat(res.value);
+        }
+        
         let totalItems = Math.min(count, result.length);
 
         var users: Array<IUserItem> = new Array<IUserItem>();
@@ -71,6 +77,7 @@ export class GraphService {
     }
 
     public async getEmployeeInterests(employeeId: string): Promise<Array<string>> {
+        // TODO: this method uses a beta endpoint and should not go in production
         try {
             const result = await  this.client
             .api(`users/${employeeId}/profile/skills`)
@@ -132,7 +139,7 @@ export class GraphService {
         const allEmployeesRaw = await this.client
             .api("users")
             .version("v1.0")
-            .select("id,displayName,mail,userPrincipalName,jobTitle,officeLocation")
+            .select("id,displayName,mail,jobTitle,officeLocation")
             .get(); 
 
         if (!allEmployeesRaw) {
@@ -195,7 +202,6 @@ export class GraphService {
             id: graphResult.id,
             displayName: graphResult.displayName,
             mail: graphResult.mail,
-            userPrincipalName: graphResult.userPrincipalName,
             initials: graphResult.displayName.match(/\b(\w)/g).join('').substr(0, 2),
             jobTitle: graphResult.jobTitle,
             officeLocation: graphResult.officeLocation

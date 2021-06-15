@@ -3,7 +3,7 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { MSGraphClient } from '@microsoft/sp-http';
-import { IFaceMatcherProps } from './components/FaceMatcher/IFaceMatcherProps';
+import IFaceMatcherProps from './components/FaceMatcher/IFaceMatcherProps';
 import FaceMatcher from './components/FaceMatcher/FaceMatcher';
 
 export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
@@ -25,8 +25,7 @@ export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
     const element: React.ReactElement<IFaceMatcherProps> = React.createElement(
       FaceMatcher,
       {
-        graphClient: this.graphClient,
-        context: this.context
+        graphClient: this.graphClient
       }
     );
 

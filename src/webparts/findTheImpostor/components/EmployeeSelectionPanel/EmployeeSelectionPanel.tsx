@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './EmployeeSelectionPanel.module.scss';
 import { IEmployeeSelectionPanelProps } from './IEmployeeSelectionPanelProps';
-import { GraphService } from 'services/GraphService';
+import GraphService from 'services/GraphService';
 import EmployeeImpostorCard from '../EmployeeImpostorCard/EmployeeImpostorCard';
-import { DefaultButton, Dialog, DialogType, Icon, useFocusRects, ZIndexes } from 'office-ui-fabric-react';
+import { DefaultButton, Dialog, DialogType, Icon } from 'office-ui-fabric-react';
 import IUserItem from 'data/IUserItem';
 import { useState } from 'react';
 import RankingService from 'services/RankingService';

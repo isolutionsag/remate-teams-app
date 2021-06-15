@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GraphService } from 'services/GraphService';
+import GraphService from 'services/GraphService';
 import IEmployeeCardProps from './IEmployeeCardProps';
 import styles from './EmployeeCard.module.scss';
 import DraggableName from '../DraggableName/DraggableName';

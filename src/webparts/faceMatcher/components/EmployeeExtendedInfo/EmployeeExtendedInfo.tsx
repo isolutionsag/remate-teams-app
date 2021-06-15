@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import styles from './EmployeeExtendedInfo.module.scss';
-import { GraphService } from 'services/GraphService';
+import GraphService from 'services/GraphService';
 import { Icon, IconButton } from '@microsoft/office-ui-fabric-react-bundle';
 import IEmployeeExtendedInfoProps from './IEmployeeExtendedInfoProps';
 

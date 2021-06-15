@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './EmployeeImpostorCard.module.scss';
 import { IEmployeeImpostorCardProps } from './IEmployeeImpostorCardProps';
-import { GraphService } from 'services/GraphService';
+import GraphService from 'services/GraphService';
 import { useEffect, useState } from 'react';
 
 const EmployeeImpostorCard: React.FunctionComponent<IEmployeeImpostorCardProps> = props => {

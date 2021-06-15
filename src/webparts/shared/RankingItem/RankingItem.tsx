@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { IRankingItemProps } from './IRankingItemProps';
-import styles from './RankingItem.module.scss';
-import { Icon } from 'office-ui-fabric-react';
 import { useEffect, useState } from 'react';
-import { GraphService } from 'services/GraphService';
+import styles from './RankingItem.module.scss';
+import IRankingItemProps from './IRankingItemProps';
+import GraphService from 'services/GraphService';
+import { Icon } from 'office-ui-fabric-react';
 
 const RankingItem: React.FunctionComponent<IRankingItemProps> = props => {
 
@@ -23,10 +23,8 @@ const RankingItem: React.FunctionComponent<IRankingItemProps> = props => {
     switch (position) {
       case 1:
         return "gold";
-        break;
       case 2:
         return "silver";
-        break;
     }
 
     return "#A67D3D";

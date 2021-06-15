@@ -1,21 +1,20 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import styles from './FaceMatcher.module.scss';
 import { DefaultButton, Dialog, DialogType, Icon, PrimaryButton } from "office-ui-fabric-react";
 import DraggableName from '../DraggableName/DraggableName';
 import IUserItem from 'data/IUserItem';
-import { IFaceMatcherProps } from './IFaceMatcherProps';
-import { GraphService } from 'services/GraphService';
+import IFaceMatcherProps from './IFaceMatcherProps';
+import GraphService from 'services/GraphService';
 import RankingService from 'services/RankingService';
 import IResult from 'data/IResult';
 import EmployeeCard from '../EmployeeCard/EmployeeCard';
-import { useEffect, useState } from 'react';
-import Ranking from '../../../shared/Ranking/Ranking';
+import Ranking from 'webparts/shared/Ranking/Ranking';
 
 const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
 
   const NUMBER_OF_EMPLOYEES: number = 4;
 
-  const [currentUser, setCurrentUser] = useState(null);
   const [shuffledUsers, setShuffledUsers] = useState([]);
   const [assignedEmployees, setAssignedEmployees] = useState([]);
   const [results, setResults] = useState([]);
@@ -24,26 +23,21 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
   const [attempts, setAttempts] = useState(0);
   const [showDialog, setShowDialog] = useState(false);
 
-  const _getCurrentUser = async (): Promise<void> => {
-    const graphService = new GraphService(props.graphClient);
-    const user: IUserItem = await graphService.getCurrentUserProfile();
-
-    setCurrentUser(user);
-  };
-
   const _getEmployees = async (): Promise<void> => {
-    const graphService = new GraphService(props.graphClient);
-    const users: Array<IUserItem> = await graphService.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
+    const service = new GraphService(props.graphClient);
+    const randomEmployees: Array<IUserItem> = await service.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
 
-    const _shuffledUsers = await graphService.shuffleUsers(users);
+    const _shuffledEmployees = service.shuffleUsers(randomEmployees);
 
-    setShuffledUsers(_shuffledUsers);
-    setResults(users.map(x => { return { employee: x, valid: false, completed: false }; }));
+    setShuffledUsers(_shuffledEmployees);
+    setResults(randomEmployees.map(employee => { 
+      return { 
+        employee: employee, 
+        valid: false,
+        completed: false 
+      }; 
+    }));
   };
-
-  useEffect(() => {
-    _getCurrentUser();
-  }, []);
 
   useEffect(() => {
     _getEmployees();
@@ -166,8 +160,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
         />
       </div>
 
-      {currentUser &&
-      <Ranking graphClient={props.graphClient} currentUser={currentUser} />}
+      <Ranking graphClient={props.graphClient} />
 
       <Dialog
         hidden={!showDialog}
