@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import styles from './EmployeeSelectionPanel.module.scss';
-import { IEmployeeSelectionPanelProps } from './IEmployeeSelectionPanelProps';
+import IEmployeeSelectionPanelProps from './IEmployeeSelectionPanelProps';
 import GraphService from 'services/GraphService';
 import EmployeeImpostorCard from '../EmployeeImpostorCard/EmployeeImpostorCard';
 import { DefaultButton, Dialog, DialogType, Icon } from 'office-ui-fabric-react';
 import IUserItem from 'data/IUserItem';
-import { useState } from 'react';
 import RankingService from 'services/RankingService';
 
 
@@ -27,7 +27,7 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
     setMembers(service.shuffleUsers(_members));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setRemainingImpostors(props.impostorsCount);
     _getMembers();
   }, []);
@@ -101,42 +101,38 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
 
   return (
     <div className={styles.employeeSelectionPanel}>
-    
-    
-    {completed ?
-    <>
+      
+      {completed ?
       <DefaultButton text='Click here to play again' onClick={() => window.location.reload()} />
-    </>
-    :
-    <>
-    <p>Select the crew members you suspect are the impostors for
-      the group: <strong>{props.group.mailNickname}</strong>
-    </p>
-    <div className={styles.counters}>
-      <p>Remaining impostors: {remainingImpostors}</p>
-      <p>Attempts: {attempts}</p>
-    </div>
-    <div className={styles.employeeSelectionGrid}>
-        {members.map(member => {
-        return <EmployeeImpostorCard
-          graphClient={props.graphClient}
-          employee={member} 
-          remainingImpostors={remainingImpostors}
-          onCardClicked={cardClicked.bind(this)}
-          />;
-        })}
-    </div>
+      :
+      <>
+        <p>Select the crew members you suspect are the impostors for
+          the group: <strong>{props.group.mailNickname}</strong>
+        </p>
+        <div className={styles.counters}>
+          <p>Remaining impostors: {remainingImpostors}</p>
+          <p>Attempts: {attempts}</p>
+        </div>
+        <div className={styles.employeeSelectionGrid}>
+            {members.map(member => {
+            return <EmployeeImpostorCard
+              graphClient={props.graphClient}
+              employee={member} 
+              remainingImpostors={remainingImpostors}
+              onCardClicked={cardClicked.bind(this)}
+              />;
+            })}
+        </div>
 
-    <DefaultButton
-      text='Process' 
-      disabled={remainingImpostors > 0}
-      onClick={process.bind(this)} />
+        <DefaultButton
+          text='Process' 
+          disabled={remainingImpostors > 0}
+          onClick={process.bind(this)} />
 
-    
       </>
-    }
+      }
         
-    <Dialog
+      <Dialog
         hidden={!showDialog}
         minWidth={400}
         onDismiss={() => {
@@ -173,7 +169,7 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
             </div>  
           }
       </Dialog>
-  </div> 
+    </div> 
   );
 };
 export default EmployeeSelectionPanel;

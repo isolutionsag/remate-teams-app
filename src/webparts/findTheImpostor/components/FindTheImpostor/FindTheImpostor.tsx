@@ -6,7 +6,6 @@ import { Dropdown } from 'office-ui-fabric-react';
 import EmployeeSelectionPanel  from '../EmployeeSelectionPanel/EmployeeSelectionPanel';
 import { useEffect, useState } from 'react';
 import Ranking from 'webparts/shared/Ranking/Ranking';
-import IUserItem from 'data/IUserItem';
 
 const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props => {
 
@@ -43,8 +42,8 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
     <>
       <p>Choose with how many impostors do you want to play:</p>
       <div className={styles.numberOfImpostorSelector}>
-        <p className={styles.oneImpostor} onClick={selectImpostorsCount.bind(this, 1)}></p>  
-        <p className={styles.twoImpostors} onClick={selectImpostorsCount.bind(this, 2)}></p>  
+        <p onClick={selectImpostorsCount.bind(this, 1)}>1</p>  
+        <p onClick={selectImpostorsCount.bind(this, 2)}>2</p>  
       </div>
     </> 
     :
