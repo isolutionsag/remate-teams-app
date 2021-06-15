@@ -2,13 +2,14 @@ import * as React from 'react';
 import styles from './FindTheImpostor.module.scss';
 import { IFindTheImpostorProps } from './IFindTheImpostorProps';
 import GraphService from 'services/GraphService';
-import { Dropdown } from 'office-ui-fabric-react';
+import { Dropdown, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import EmployeeSelectionPanel  from '../EmployeeSelectionPanel/EmployeeSelectionPanel';
 import { useEffect, useState } from 'react';
 import Ranking from 'webparts/shared/Ranking/Ranking';
 
 const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props => {
 
+  const [loaded, setLoaded] = useState(false);
   const [impostorsCount, setImpostorsCount] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [groups, setGroups] = useState([]);
@@ -18,6 +19,7 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
     const _groups: Array<any> = await service.getAllGroups();
     
     setGroups(_groups);
+    setLoaded(true);
   };
 
   useEffect(() => {
@@ -38,7 +40,10 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
       Your team is in a secret mission and you all have been boarded into a spaceship to accomplish it. While you are in the far space, you get an anonymous message informing that one or various members of the crew are impostors and want to sabotage the whole mission. Will you be able to detect who or whom are the impostors in less than three attempts?
     </p>
 
-    {!impostorsCount ? 
+    {!loaded ? 
+    <Spinner size={SpinnerSize.large} label='Loading groups...' />
+    :
+    !impostorsCount ? 
     <>
       <p>Choose with how many impostors do you want to play:</p>
       <div className={styles.numberOfImpostorSelector}>

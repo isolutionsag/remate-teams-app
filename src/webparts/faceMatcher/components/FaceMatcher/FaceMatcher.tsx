@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import styles from './FaceMatcher.module.scss';
-import { DefaultButton, Dialog, DialogType, Icon, PrimaryButton } from "office-ui-fabric-react";
+import { DefaultButton, Dialog, DialogType, Icon, PrimaryButton, Spinner, SpinnerSize } from "office-ui-fabric-react";
 import DraggableName from '../DraggableName/DraggableName';
 import IUserItem from 'data/IUserItem';
 import IFaceMatcherProps from './IFaceMatcherProps';
@@ -22,6 +22,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
   const [validated, setValidated] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [showDialog, setShowDialog] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const _getEmployees = async (): Promise<void> => {
     const service = new GraphService(props.graphClient);
@@ -37,6 +38,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
         completed: false 
       }; 
     }));
+    setLoaded(true);
   };
 
   useEffect(() => {
@@ -116,50 +118,56 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
 
       <hr />
 
-      <div className={styles.namesOuterContainer}>
-        <div className={styles.namesInnerContainer}>
-          <div className={styles.xxx}>
-            <h3>Remate's Names</h3>
-            <p>Drag the names from here:</p>
-            <div className={styles.dragDropArea}>
-              {shuffledUsers.map((employee: IUserItem) => {
-                return assignedEmployees.indexOf(employee.displayName) === -1 &&
-                  <DraggableName employee={employee}></DraggableName>;
-              })}
+      {!loaded ? 
+      <Spinner size={SpinnerSize.large} label='Loading random employees...' />
+      :
+      <>
+        <div className={styles.namesOuterContainer}>
+          <div className={styles.namesInnerContainer}>
+            <div className={styles.xxx}>
+              <h3>Remate's Names</h3>
+              <p>Drag the names from here:</p>
+              <div className={styles.dragDropArea}>
+                {shuffledUsers.map((employee: IUserItem) => {
+                  return assignedEmployees.indexOf(employee.displayName) === -1 &&
+                    <DraggableName employee={employee}></DraggableName>;
+                })}
+              </div>
             </div>
           </div>
+
+        </div>
+        <div className={styles.employeeCardContainer}>
+          {results.map((result: IResult, index: number) => {
+            return <EmployeeCard
+              expanded={completed}
+              result={result}
+              graphClient={props.graphClient}
+              person={result.employee}
+              selectedEmployee={result.selectedEmployee}
+              onUserDropped={(employee: IUserItem) => employeeDropped(employee, index)}
+              validated={validated}
+            />;
+          })}
         </div>
 
-      </div>
-      <div className={styles.employeeCardContainer}>
-        {results.map((result: IResult, index: number) => {
-          return <EmployeeCard
-            expanded={completed}
-            result={result}
-            graphClient={props.graphClient}
-            person={result.employee}
-            selectedEmployee={result.selectedEmployee}
-            onUserDropped={(employee: IUserItem) => employeeDropped(employee, index)}
-            validated={validated}
-          />;
-        })}
-      </div>
+        <div className={styles.buttons}>
+          <PrimaryButton
+            iconProps={{ iconName: 'SkypeCheck' }}
+            text='Confirm'
+            disabled={assignedEmployees.length !== NUMBER_OF_EMPLOYEES || completed}
+            onClick={validateResults.bind(this)}
+          />
+          <DefaultButton
+            iconProps={{ iconName: 'Sync' }}
+            text='Play Again'
+            disabled={!completed}
+            onClick={reset.bind(this)}
+          />
+        </div>
 
-      <div className={styles.buttons}>
-        <PrimaryButton
-          iconProps={{ iconName: 'SkypeCheck' }}
-          text='Confirm'
-          disabled={assignedEmployees.length !== NUMBER_OF_EMPLOYEES || completed}
-          onClick={validateResults.bind(this)}
-        />
-        <DefaultButton
-          iconProps={{ iconName: 'Sync' }}
-          text='Play Again'
-          disabled={!completed}
-          onClick={reset.bind(this)}
-        />
-      </div>
-
+      </>
+      }
       <Ranking graphClient={props.graphClient} />
 
       <Dialog

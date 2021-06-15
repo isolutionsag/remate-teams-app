@@ -30,24 +30,18 @@
     display: flex;
     justify-content: center;
 
-    .oneImpostor {
-      background-image: url(./images/oneImpostor.png);
-      height: 125px;
-      width: 120px;
-      background-size: 120px;
-    }
-  
-    .twoImpostors {
-      background-size: 160px;
-      width: 150px;
-      width: 150px;
-      background-image: url(./images/twoImpostors.png);
-    }
-  
-    .oneImpostor, .twoImpostors {
-      cursor: pointer;
+    p {
+      width: 100px;
+      height: 100px;
+      background-color: #333;
+      display: grid;
+      align-items: center;
+      text-align: center;
       margin: 50px;
-      background-repeat: no-repeat;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 45px;
+      color: #fff;
 
       &:hover {
         transform: scale(1.05);

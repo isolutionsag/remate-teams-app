@@ -4,13 +4,14 @@ import styles from './EmployeeSelectionPanel.module.scss';
 import IEmployeeSelectionPanelProps from './IEmployeeSelectionPanelProps';
 import GraphService from 'services/GraphService';
 import EmployeeImpostorCard from '../EmployeeImpostorCard/EmployeeImpostorCard';
-import { DefaultButton, Dialog, DialogType, Icon } from 'office-ui-fabric-react';
+import { DefaultButton, Dialog, DialogType, Icon, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import IUserItem from 'data/IUserItem';
 import RankingService from 'services/RankingService';
 
 
 const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelProps> = props => {
 
+  const [loaded, setLoaded] = useState(false);
   const [remainingImpostors, setRemainingImpostors] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [members, setMembers] = useState([]);
@@ -25,6 +26,7 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
     _members = await service.appendRandomEmployees(_members, props.impostorsCount);
     
     setMembers(service.shuffleUsers(_members));
+    setLoaded(true);
   };
 
   useEffect(() => {
@@ -104,6 +106,9 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
       
       {completed ?
       <DefaultButton text='Click here to play again' onClick={() => window.location.reload()} />
+      :
+      !loaded ? 
+      <Spinner size={SpinnerSize.large} label='Loading groups...' />
       :
       <>
         <p>Select the crew members you suspect are the impostors for

@@ -7,56 +7,66 @@ export default class GraphService {
     constructor(private client: MSGraphClient) {}
 
     public async getCurrentUserProfile(): Promise<IUserItem> {
-        const res = await this.client
+
+        try {
+            const apiResponse: any = await this.client
             .api("me")
             .version("v1.0")
             .select("id,displayName,mail,jobTitle,officeLocation")
             .get(); 
 
-        if (!res) {
-            return Promise.reject("Current user profile not found");
+            if (!apiResponse) {
+                return Promise.reject("Current user profile not found");
+            }
+
+            const result: IUserItem = this.mapUserData(apiResponse);
+
+            return Promise.resolve(result);
+        } catch (err) {
+            Promise.reject(err);
         }
-
-        const result: IUserItem = this.mapUserData(res);
-
-        return Promise.resolve(result);
+        
     }
 
     public async getRandomEmployeesList(count: number): Promise<Array<IUserItem>> {
         
-        let res = await this.client
-            .api("users")
-            .version("v1.0")
-            .select("id,displayName,mail,jobTitle,officeLocation")
-            .get(); 
+        try {
+            let apiResponse = await this.client
+                .api("users")
+                .version("v1.0")
+                .select("id,displayName,mail,jobTitle,officeLocation")
+                .get(); 
 
-        if (!res) {
-          return Promise.reject("No results have been fetched");
+            if (!apiResponse) {
+                return Promise.reject("No results have been fetched");
+            }
+
+            let result: any[] = apiResponse.value.slice();
+
+            while (apiResponse["@odata.nextLink"]) {
+                apiResponse = await this.client.api(apiResponse["@odata.nextLink"]).get();
+                result = result.concat(apiResponse.value);
+            }
+            
+            let itemsToReturn: number = Math.min(count, result.length);
+
+            var randomEmployees: Array<IUserItem> = new Array<IUserItem>();
+            
+            while (randomEmployees.length < itemsToReturn) {
+
+                const random = Math.floor(Math.random() * result.length);
+
+                randomEmployees.push(this.mapUserData(result[random]));
+
+                result = result.filter((value, index, array) => { 
+                    return index !== random;
+                });
+            }
+
+            return Promise.resolve(randomEmployees);
+        } catch (err) {
+            Promise.reject(err);
         }
-
-        let result: any[] = res.value.slice();
-
-        while (res["@odata.nextLink"]) {
-            res = await this.client.api(res["@odata.nextLink"]).get();
-            result = result.concat(res.value);
-        }
-        
-        let totalItems = Math.min(count, result.length);
-
-        var users: Array<IUserItem> = new Array<IUserItem>();
-        
-        while (users.length < totalItems) {
-
-            const random = Math.floor(Math.random() * result.length);
-
-            users.push(this.mapUserData(result[random]));
-
-            result = result.filter((value, index, arr) => { 
-                return index !== random;
-            });
-        }
-
-        return Promise.resolve(users);
     }
          
     public async getEmployeePhoto(employeeId: string): Promise<string> {
@@ -67,9 +77,9 @@ export default class GraphService {
             .responseType('blob')
             .get();
 
-        const url = window.URL;
-        const blobUrl = url.createObjectURL(blob);
-        return Promise.resolve(blobUrl);
+            const url = window.URL;
+            const blobUrl = url.createObjectURL(blob);
+            return Promise.resolve(blobUrl);
 
         } catch (err) {
             Promise.reject(err);
@@ -79,14 +89,13 @@ export default class GraphService {
     public async getEmployeeInterests(employeeId: string): Promise<Array<string>> {
         // TODO: this method uses a beta endpoint and should not go in production
         try {
-            const result = await  this.client
-            .api(`users/${employeeId}/profile/skills`)
-            .version('beta')
-            .get();
+            const apiResponse = await  this.client
+                .api(`users/${employeeId}/profile/skills`)
+                .version('beta')
+                .get();
 
-            console.dir(result);
-            const skills: Array<string> = result.value.map(x => {
-                return x.displayName;
+            const skills: Array<string> = apiResponse.value.map(skill => {
+                return skill.displayName;
             });
 
             return Promise.resolve(skills);
@@ -98,80 +107,100 @@ export default class GraphService {
 
     public async getAllGroups(): Promise<Array<IGroupItem>> {
         
-        const res: any = await this.client
-            .api("groups")
-            .version("v1.0")
-            .select("id,mailNickname")
-            .get(); 
+        try {
+            const apiResponse: any = await this.client
+                .api("groups")
+                .version("v1.0")
+                .select("id,mailNickname")
+                .get(); 
 
-        if (!res) {
-          return Promise.reject("No results have been fetched");
+            if (!apiResponse) {
+                return Promise.reject("No results have been fetched");
+            }
+
+            const result: Array<IGroupItem> = apiResponse.value.map(group => {
+                return {
+                    id: group.id,
+                    mailNickname: group.mailNickname
+                };
+            });
+
+            return Promise.resolve(result);
+
+        } catch (err) {
+            Promise.reject(err);
         }
-
-        const result: Array<IGroupItem> = res.value.map(group => {
-            return {
-                id: group.id,
-                mailNickname: group.mailNickname
-            };
-        });
-
-        return Promise.resolve(result);
     }
 
     public async getGroupMembers(groupId: string): Promise<Array<IUserItem>> {
         
-        const res: any = await this.client
-            .api(`groups/${groupId}/members`)
-            .version("v1.0")
-            .select("id,displayName,mail,jobTitle")
-            .get(); 
+        try {
+            const apiResponse: any = await this.client
+                .api(`groups/${groupId}/members`)
+                .version("v1.0")
+                .select("id,displayName,mail,jobTitle")
+                .get(); 
 
-        if (!res) {
-          return Promise.reject("No results have been fetched");
+            if (!apiResponse) {
+                return Promise.reject("No results have been fetched");
+            }
+
+            const result: Array<IUserItem> = apiResponse.value
+                .map(member => this.mapUserData(member));
+
+            return Promise.resolve(result);
+        } catch (err) {
+            Promise.reject(err);
         }
-
-        const result: Array<IUserItem> = res.value.map(member => this.mapUserData(member));
-
-        return Promise.resolve(result);
     }
 
     public async appendRandomEmployees(groupMembers: Array<IUserItem>, numberToAdd: number) {
-        const allEmployeesRaw = await this.client
-            .api("users")
-            .version("v1.0")
-            .select("id,displayName,mail,jobTitle,officeLocation")
-            .get(); 
+        try {
+            let apiResponse = await this.client
+                .api("users")
+                .version("v1.0")
+                .select("id,displayName,mail,jobTitle,officeLocation")
+                .get(); 
 
-        if (!allEmployeesRaw) {
-          return Promise.reject("No results have been fetched");
+            let allEmployees: any[] = apiResponse.value.slice();
+
+            while (apiResponse["@odata.nextLink"]) {
+                apiResponse = await this.client.api(apiResponse["@odata.nextLink"]).get();
+                allEmployees = allEmployees.concat(apiResponse.value);
+            }
+
+            if (!apiResponse) {
+                return Promise.reject("No results have been fetched");
+            }
+
+            const unexistingEmployees = this.getUnexistingEmployees(groupMembers, allEmployees);
+
+            if (unexistingEmployees.length < numberToAdd) {
+                Promise.reject("Can't play with this group.");
+            }
+
+            let result: any[] = unexistingEmployees.slice();
+            let addedEmployees: number = 0;
+            
+            var users: Array<IUserItem> = groupMembers.slice();
+            while (addedEmployees < numberToAdd) {
+
+                const random = Math.floor(Math.random() * result.length);
+                let userToAdd: IUserItem = this.mapUserData(result[random]);
+                userToAdd.impostor = true;
+                users.push(userToAdd);
+
+                result = result.filter((value, index, arr) => { 
+                    return index !== random;
+                });
+
+                addedEmployees ++;
+            }
+
+            return Promise.resolve(users);
+        } catch (err) {
+            Promise.reject(err);
         }
-
-        const unexistingEmployees = this.getUnexistingEmployees(groupMembers, allEmployeesRaw.value);
-
-        if (unexistingEmployees.length < numberToAdd) {
-            Promise.reject("Can't play with this group.");
-        }
-
-        let result: any[] = unexistingEmployees.slice();
-        let added: number = 0;
-        
-        var users: Array<IUserItem> = groupMembers.slice();
-        while (added < numberToAdd) {
-
-            const random = Math.floor(Math.random() * result.length);
-            let userToAdd: IUserItem = this.mapUserData(result[random]);
-            userToAdd.impostor = true;
-            users.push(userToAdd);
-
-            result = result.filter((value, index, arr) => { 
-                return index !== random;
-            });
-
-            added ++;
-        }
-
-        return Promise.resolve(users);
-
     }
 
     public shuffleUsers(users: Array<IUserItem>): Array<IUserItem> {
