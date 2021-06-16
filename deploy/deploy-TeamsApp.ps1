@@ -29,11 +29,11 @@ Param(
     Write-Host "OK" -ForegroundColor Green
 
     Write-Host " > Deploying App...                         " -NoNewline
-    $c = Add-PnPApp -Path ./../sharepoint/solution/remate-teams-app.sppkg -Publish -Overwrite -SkipFeatureDeployment
+    $app = Add-PnPApp -Path ./../sharepoint/solution/remate-teams-app.sppkg -Publish -Overwrite -SkipFeatureDeployment
     Write-Host "OK" -ForegroundColor Green
 
     Write-Host " > Syncronizing App with Teams...           " -NoNewline
-    Sync-PnPAppToTeams -Identity $c.Id
+    Sync-PnPAppToTeams -Identity $app.Id
     Write-Host "OK`n" -ForegroundColor Green
 
     Do { $approveRequests = Read-Host " >>> Would you like the script to approve API access requests? ([Y]es / [N]o)" } 
