@@ -13,6 +13,7 @@ release
 solution
 temp
 *.sppkg
+teams/*.zip
 
 # Coverage directory used by tools like istanbul
 coverage
