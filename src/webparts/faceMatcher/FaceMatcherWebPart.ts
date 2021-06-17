@@ -5,12 +5,14 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { MSGraphClient } from '@microsoft/sp-http';
 import IFaceMatcherProps from './components/FaceMatcher/IFaceMatcherProps';
 import FaceMatcher from './components/FaceMatcher/FaceMatcher';
+import { initializeIcons } from 'office-ui-fabric-react';
 
 export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
 
   private graphClient: MSGraphClient;
 
   public onInit(): Promise<void> {
+    initializeIcons();
     return new Promise<void>((resolve: () => void, reject: (error: any) => void): void => {
       this.context.msGraphClientFactory
         .getClient()
