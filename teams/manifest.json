@@ -1,0 +1,58 @@
+{
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.9",
+    "packageName": "remateApp",
+    "id": "c057e8bc-2da2-4fd5-9d87-a0282874bed4",
+    "version": "1.0.0",
+    "developer": {
+        "name": "isolutions AG",
+        "websiteUrl": "https://www.isolutions.ch/",
+        "privacyUrl": "https://github.com/is-dmartos/RemateTeamsApp",
+        "termsOfUseUrl": "https://github.com/is-dmartos/RemateTeamsApp"
+    },
+    "name": {
+        "short": "Remate"
+    },
+    "description": {
+        "short": "Learn more about your peers in a simple way",
+        "full": "This is a resource for you to get to know your colleagues better. We realized that it is not always easy to get to know the people we work with throughout the day, especially in these difficult times, where lots of us work from home."
+    },
+    "icons": {
+        "outline": "outline.png",
+        "color": "color.png"
+    },
+    "accentColor": "#004578",
+    "staticTabs": [
+        {
+            "entityId": "c057e8bc-2da2-4fd5-9d87-a0282874bed4",
+            "name": "Face Matcher",
+            "contentUrl": "https://{teamSiteDomain}/_layouts/15/TeamsLogon.aspx?SPFX=true&dest=/_layouts/15/teamshostedapp.aspx%3Fteams%26personal%26componentId=c057e8bc-2da2-4fd5-9d87-a0282874bed4%26forceLocale={locale}",
+            "websiteUrl": "https://github.com/is-dmartos/RemateTeamsApp",
+            "scopes": [
+                "personal"
+            ]
+        },
+        {
+            "entityId": "fd4be071-5257-4593-9c39-f3f9920a8622",
+            "name": "Find the Impostor",
+            "contentUrl": "https://{teamSiteDomain}/_layouts/15/TeamsLogon.aspx?SPFX=true&dest=/_layouts/15/teamshostedapp.aspx%3Fteams%26personal%26componentId=fd4be071-5257-4593-9c39-f3f9920a8622%26forceLocale={locale}",
+            "websiteUrl": "https://products.office.com/en-us/sharepoint/collaboration",
+            "scopes": [
+                "personal"
+            ]
+        }
+    ],
+    "validDomains": [
+        "*.login.microsoftonline.com",
+        "*.sharepoint.com",
+        "*.sharepoint-df.com",
+        "spoppe-a.akamaihd.net",
+        "spoprod-a.akamaihd.net",
+        "resourceseng.blob.core.windows.net",
+        "msft.spoppe.com"
+    ],
+    "webApplicationInfo": {
+        "resource": "https://{teamSiteDomain}",
+        "id": "00000003-0000-0ff1-ce00-000000000000"
+    }
+}
