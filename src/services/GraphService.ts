@@ -89,6 +89,8 @@ export default class GraphService {
     public async getEmployeeInterests(employeeId: string): Promise<Array<string>> {
         // TODO: this method uses a beta endpoint and should not go in production
         try {
+           
+
             const apiResponse = await  this.client
                 .api(`users/${employeeId}/profile/skills`)
                 .version('beta')
@@ -101,7 +103,7 @@ export default class GraphService {
             return Promise.resolve(skills);
 
         } catch (err) {
-            Promise.reject(err);
+            return Promise.resolve([]);
         }
     }
 
