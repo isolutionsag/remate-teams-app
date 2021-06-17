@@ -1,0 +1,475 @@
+{
+    "source": 2,
+    "revision": 47,
+    "description": null,
+    "createdBy": {
+        "displayName": "David Martos",
+        "url": "https://spsprodeus23.vssps.visualstudio.com/A9a5cc398-64f1-4e10-8f45-2c4fff506187/_apis/Identities/a19254fe-16df-4263-805b-8f5d635c9e6a",
+        "_links": {
+            "avatar": {
+                "href": "https://davidmartos.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj"
+            }
+        },
+        "id": "a19254fe-16df-4263-805b-8f5d635c9e6a",
+        "uniqueName": "david.martos@outlook.com",
+        "imageUrl": "https://davidmartos.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj",
+        "descriptor": "msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj"
+    },
+    "createdOn": "2021-06-16T09:42:25.277Z",
+    "modifiedBy": {
+        "displayName": "David Martos",
+        "url": "https://spsprodeus23.vssps.visualstudio.com/A9a5cc398-64f1-4e10-8f45-2c4fff506187/_apis/Identities/a19254fe-16df-4263-805b-8f5d635c9e6a",
+        "_links": {
+            "avatar": {
+                "href": "https://davidmartos.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj"
+            }
+        },
+        "id": "a19254fe-16df-4263-805b-8f5d635c9e6a",
+        "uniqueName": "david.martos@outlook.com",
+        "imageUrl": "https://davidmartos.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj",
+        "descriptor": "msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj"
+    },
+    "modifiedOn": "2021-06-17T09:28:22.420Z",
+    "isDeleted": false,
+    "lastRelease": {
+        "id": 42,
+        "name": "Release-42",
+        "artifacts": [],
+        "_links": {},
+        "description": "Triggered by ci.pipeline 20210617.7.",
+        "releaseDefinition": {
+            "id": 1,
+            "projectReference": null,
+            "_links": {}
+        },
+        "createdOn": "2021-06-17T09:34:07.020Z",
+        "createdBy": {
+            "displayName": "David Martos",
+            "url": "https://spsprodeus23.vssps.visualstudio.com/A9a5cc398-64f1-4e10-8f45-2c4fff506187/_apis/Identities/a19254fe-16df-4263-805b-8f5d635c9e6a",
+            "_links": {
+                "avatar": {
+                    "href": "https://davidmartos.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj"
+                }
+            },
+            "id": "a19254fe-16df-4263-805b-8f5d635c9e6a",
+            "uniqueName": "david.martos@outlook.com",
+            "imageUrl": "https://davidmartos.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj",
+            "descriptor": "msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj"
+        }
+    },
+    "variables": {
+        "appId": {
+            "value": "c057e8bc-2da2-4fd5-9d87-a0282874bed4"
+        },
+        "password": {
+            "value": null,
+            "isSecret": true
+        },
+        "tenant": {
+            "value": "isdmartos"
+        },
+        "username": {
+            "value": "devops@isdmartos.onmicrosoft.com"
+        }
+    },
+    "variableGroups": [],
+    "environments": [
+        {
+            "id": 1,
+            "name": "Development",
+            "rank": 1,
+            "owner": {
+                "displayName": "David Martos",
+                "url": "https://spsprodeus23.vssps.visualstudio.com/A9a5cc398-64f1-4e10-8f45-2c4fff506187/_apis/Identities/a19254fe-16df-4263-805b-8f5d635c9e6a",
+                "_links": {
+                    "avatar": {
+                        "href": "https://davidmartos.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj"
+                    }
+                },
+                "id": "a19254fe-16df-4263-805b-8f5d635c9e6a",
+                "uniqueName": "david.martos@outlook.com",
+                "imageUrl": "https://davidmartos.visualstudio.com/_apis/GraphProfile/MemberAvatars/msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj",
+                "descriptor": "msa.NmM0ZDUyZWUtMzdiZi03NWUzLTgzNDYtZDc4YjUxMTc1ZjZj"
+            },
+            "variables": {},
+            "variableGroups": [],
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 1
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": false,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 1
+                }
+            },
+            "deployStep": {
+                "id": 2
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 3
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": false,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 2
+                }
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": 0
+                        },
+                        "agentSpecification": {
+                            "identifier": "ubuntu-20.04"
+                        },
+                        "skipArtifactsDownload": false,
+                        "artifactsDownloadInput": {
+                            "downloadInputs": []
+                        },
+                        "queueId": 122,
+                        "demands": [],
+                        "enableAccessToken": false,
+                        "timeoutInMinutes": 0,
+                        "jobCancelTimeoutInMinutes": 1,
+                        "condition": "succeeded()",
+                        "overrideInputs": {}
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Agent job",
+                    "refName": null,
+                    "workflowTasks": [
+                        {
+                            "environment": {},
+                            "taskId": "31c75bbb-bcdf-4706-8d7c-4da6a1959bc2",
+                            "version": "0.*",
+                            "name": "Use Node 14.x",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "versionSpec": "14.x",
+                                "checkLatest": "false",
+                                "force32bit": "false"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "fe47e961-9fa8-4106-8639-368c022d43ad",
+                            "version": "1.*",
+                            "name": "Install m365 cli",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "command": "custom",
+                                "workingDir": "",
+                                "verbose": "false",
+                                "customCommand": "install -g @pnp/cli-microsoft365",
+                                "customRegistry": "useNpmrc",
+                                "customFeed": "",
+                                "customEndpoint": "",
+                                "publishRegistry": "useExternalRegistry",
+                                "publishFeed": "",
+                                "publishPackageMetadata": "true",
+                                "publishEndpoint": ""
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+                            "version": "2.*",
+                            "name": "Login in M365 Tenant",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "script": "m365 login -t password -u $(username) -p $(password)",
+                                "workingDirectory": "",
+                                "failOnStderr": "false"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+                            "version": "2.*",
+                            "name": "Add SPFx App",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "script": "Write-Host \"$(System.DefaultWorkingDirectory)/_Remate/drop/remate-teams-app.sppkg\"\nm365 spo app add -p $(System.DefaultWorkingDirectory)/_Remate/drop/remate-teams-app.sppkg --overwrite",
+                                "workingDirectory": "",
+                                "failOnStderr": "false"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+                            "version": "2.*",
+                            "name": "Deploy SPFx App",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "script": "m365 spo app deploy --name remate-teams-app.sppkg --skipFeatureDeployment",
+                                "workingDirectory": "",
+                                "failOnStderr": "false"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+                            "version": "2.*",
+                            "name": "Deploy Teams App",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "targetType": "inline",
+                                "filePath": "",
+                                "arguments": "",
+                                "script": "m365 login --authType password --userName $(username) --password $(password)\n \n#try to get app with manifest id\n$catalogApps = m365 teams app list -o json | ConvertFrom-Json\n$existingApp = $catalogApps | Where-Object {$_.externalId -eq \"c057e8bc-2da2-4fd5-9d87-a0282874bed4\" }\n \nif($existingApp){\n    #app already exists so update it.\n    #id used to update is the one returned from the teams app list call\nWrite-Host \"The app exists. Updating...\"\n    m365 teams app update --id $existingApp.id --filePath \"$(System.DefaultWorkingDirectory)/_Remate/drop/TeamsSPFxApp.zip\"\n}\nelse{\n    #app does not exist so add it.\nWrite-Host \"App not found. Installing $(System.DefaultWorkingDirectory)/_Remate/drop/TeamsSPFxApp.zip\"\n    m365 teams app publish --filePath \"$(System.DefaultWorkingDirectory)/_Remate/drop/TeamsSPFxApp.zip\" --verbose\n}",
+                                "errorActionPreference": "stop",
+                                "failOnStderr": "false",
+                                "showWarnings": "false",
+                                "ignoreLASTEXITCODE": "false",
+                                "pwsh": "false",
+                                "workingDirectory": "$(System.DefaultWorkingDirectory)/_Remate",
+                                "runScriptInSeparateScope": "false"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+                            "version": "2.*",
+                            "name": "Approve pending API requests",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "targetType": "inline",
+                                "filePath": "",
+                                "arguments": "",
+                                "script": "m365 login --authType password --userName $(username) --password $(password)\n \n$requests = m365 spo serviceprincipal permissionrequest list -o json | ConvertFrom-Json\n\nforeach ($request in $requests)\n{\n   m365 spo serviceprincipal permissionrequest approve --requestId $request.Id\n}",
+                                "errorActionPreference": "stop",
+                                "failOnStderr": "false",
+                                "showWarnings": "false",
+                                "ignoreLASTEXITCODE": "false",
+                                "pwsh": "false",
+                                "workingDirectory": "$(System.DefaultWorkingDirectory)/_Remate",
+                                "runScriptInSeparateScope": "false"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "OnlyOnFailure",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": true,
+                "badgeEnabled": false,
+                "autoLinkWorkItems": false,
+                "pullRequestDeploymentEnabled": false
+            },
+            "demands": [],
+            "conditions": [
+                {
+                    "name": "ReleaseStarted",
+                    "conditionType": 1,
+                    "value": ""
+                }
+            ],
+            "executionPolicy": {
+                "concurrencyCount": 1,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "currentRelease": {
+                "id": 42,
+                "url": "https://davidmartos.vsrm.visualstudio.com/a5d4959b-87d8-480d-844e-76c72c5abb53/_apis/Release/releases/42",
+                "_links": {}
+            },
+            "retentionPolicy": {
+                "daysToKeep": 30,
+                "releasesToKeep": 3,
+                "retainBuild": true
+            },
+            "processParameters": {},
+            "properties": {
+                "BoardsEnvironmentType": {
+                    "$type": "System.String",
+                    "$value": "unmapped"
+                },
+                "LinkBoardsWorkItems": {
+                    "$type": "System.String",
+                    "$value": "False"
+                }
+            },
+            "preDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "postDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "environmentTriggers": [],
+            "badgeUrl": "https://davidmartos.vsrm.visualstudio.com/_apis/public/Release/badge/a5d4959b-87d8-480d-844e-76c72c5abb53/1/1"
+        }
+    ],
+    "artifacts": [
+        {
+            "sourceId": "a5d4959b-87d8-480d-844e-76c72c5abb53:6",
+            "type": "Build",
+            "alias": "_Remate",
+            "definitionReference": {
+                "artifactSourceDefinitionUrl": {
+                    "id": "https://davidmartos.visualstudio.com/_permalink/_build/index?collectionId=e5a68ecb-8dca-467f-8305-a9abc8fb003d&projectId=a5d4959b-87d8-480d-844e-76c72c5abb53&definitionId=6",
+                    "name": ""
+                },
+                "defaultVersionBranch": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionSpecific": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionTags": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionType": {
+                    "id": "latestType",
+                    "name": "Latest"
+                },
+                "definition": {
+                    "id": "6",
+                    "name": "Remate"
+                },
+                "definitions": {
+                    "id": "",
+                    "name": ""
+                },
+                "IsMultiDefinitionType": {
+                    "id": "False",
+                    "name": "False"
+                },
+                "project": {
+                    "id": "a5d4959b-87d8-480d-844e-76c72c5abb53",
+                    "name": "Remate"
+                },
+                "repository": {
+                    "id": "",
+                    "name": ""
+                }
+            },
+            "isPrimary": true,
+            "isRetained": false
+        }
+    ],
+    "triggers": [
+        {
+            "artifactAlias": "_Remate",
+            "triggerConditions": [
+                {
+                    "sourceBranch": "main",
+                    "tags": [],
+                    "tagFilter": null,
+                    "useBuildDefinitionBranch": false,
+                    "createReleaseOnBuildTagging": false
+                }
+            ],
+            "triggerType": 1
+        }
+    ],
+    "releaseNameFormat": "Release-$(rev:r)",
+    "tags": [],
+    "properties": {
+        "DefinitionCreationSource": {
+            "$type": "System.String",
+            "$value": "ReleaseNew"
+        },
+        "IntegrateBoardsWorkItems": {
+            "$type": "System.String",
+            "$value": "False"
+        },
+        "IntegrateJiraWorkItems": {
+            "$type": "System.String",
+            "$value": "false"
+        }
+    },
+    "id": 1,
+    "name": "cd.pipeline",
+    "path": "\\",
+    "projectReference": null,
+    "url": "https://davidmartos.vsrm.visualstudio.com/a5d4959b-87d8-480d-844e-76c72c5abb53/_apis/Release/definitions/1",
+    "_links": {
+        "self": {
+            "href": "https://davidmartos.vsrm.visualstudio.com/a5d4959b-87d8-480d-844e-76c72c5abb53/_apis/Release/definitions/1"
+        },
+        "web": {
+            "href": "https://davidmartos.visualstudio.com/a5d4959b-87d8-480d-844e-76c72c5abb53/_release?definitionId=1"
+        }
+    }
+}
