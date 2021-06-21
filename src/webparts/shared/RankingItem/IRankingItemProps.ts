@@ -1,8 +1,8 @@
-import { MSGraphClient } from '@microsoft/sp-http';
 import IRankingItem from 'data/IRankingItem';
+import IGraphService from 'services/IGraphService';
 
 export default interface IRankingItemProps {
-    graphClient: MSGraphClient;
+    graphService: IGraphService;
     position: number;
     rankingInfo: IRankingItem;
     isCurrentUser: boolean;

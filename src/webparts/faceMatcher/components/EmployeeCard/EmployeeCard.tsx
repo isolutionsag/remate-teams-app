@@ -11,8 +11,8 @@ const EmployeeCard: React.FunctionComponent<IEmployeeCardProps> = props => {
   const [image, setImage] = useState("");
 
   const _getImage = async (): Promise<void> => {
-    const service = new GraphService(props.graphClient);
-    const photo = await service.getEmployeePhoto(props.person.id);
+    // const service = new GraphService(props.graphClient);
+    const photo = await props.graphService.getEmployeePhoto(props.person.id);
     setImage(photo);
   };
 
@@ -91,7 +91,7 @@ const EmployeeCard: React.FunctionComponent<IEmployeeCardProps> = props => {
             <DraggableName employee={props.selectedEmployee} blocked={true} />}
         </div>
         {props.expanded &&
-          <EmployeeExtendedInfo person={props.person} graphClient={props.graphClient} />}
+          <EmployeeExtendedInfo person={props.person} graphService={props.graphService} />}
       </div>
     </div>
   );

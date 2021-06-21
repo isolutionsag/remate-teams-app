@@ -15,8 +15,8 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
   const [groups, setGroups] = useState([]);
   
   const _getGroups = async (): Promise<void> => {
-    const service = new GraphService(props.graphClient);
-    const _groups: Array<any> = await service.getAllGroups();
+    // const service = new GraphService(props.graphService);
+    const _groups: Array<any> = await props.graphService.getAllGroups();
     
     setGroups(_groups);
     setLoaded(true);
@@ -65,12 +65,13 @@ const FindTheImpostor: React.FunctionComponent<IFindTheImpostorProps> = props =>
       </div>
     :
       <EmployeeSelectionPanel
-        graphClient={props.graphClient}
+        graphService={props.graphService}
+        rankingService={props.rankingService}
         group={selectedGroup} 
         impostorsCount={impostorsCount}/>
     }
 
-    <Ranking graphClient={props.graphClient} />
+    <Ranking graphService={props.graphService} rankingService={props.rankingService} />
  
   </div>
   );

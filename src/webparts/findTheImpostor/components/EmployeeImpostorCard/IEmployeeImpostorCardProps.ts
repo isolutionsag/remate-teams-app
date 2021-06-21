@@ -1,8 +1,9 @@
 import { MSGraphClient } from '@microsoft/sp-http';
 import IUserItem from 'data/IUserItem';
+import IGraphService from 'services/IGraphService';
 
 export interface IEmployeeImpostorCardProps {
-  graphClient: MSGraphClient;
+  graphService: IGraphService;
   employee: IUserItem;
   onCardClicked: any;
   remainingImpostors: number;

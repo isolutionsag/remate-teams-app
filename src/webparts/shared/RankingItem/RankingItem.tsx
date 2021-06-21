@@ -2,21 +2,19 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import styles from './RankingItem.module.scss';
 import IRankingItemProps from './IRankingItemProps';
-import GraphService from 'services/GraphService';
 import { Icon } from 'office-ui-fabric-react';
 
-const RankingItem: React.FunctionComponent<IRankingItemProps> = props => {
+export const RankingItem: React.FunctionComponent<IRankingItemProps> = props => {
 
   const [image, setImage] = useState("");
 
   const _getImage = async (): Promise<void> => {
-    const service = new GraphService(props.graphClient);
-    const photo = await service.getEmployeePhoto(props.rankingInfo.user.id);
+    const photo = await props.graphService.getEmployeePhoto(props.rankingInfo.user.id);
     setImage(photo);
   };
 
   useEffect(() => {
-    _getImage();
+    //_getImage();
   }, []);
 
   const getMetalColor = (position: number): string => {

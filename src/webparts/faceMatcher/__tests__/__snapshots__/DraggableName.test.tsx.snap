@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DraggableName should render properly 1`] = `
+<div
+  className={undefined}
+  draggable={true}
+  onDragStart={[Function]}
+>
+  <i
+    aria-hidden={true}
+    className="root-37"
+    data-icon-name="Contact"
+  />
+   
+  John Doe
+</div>
+`;

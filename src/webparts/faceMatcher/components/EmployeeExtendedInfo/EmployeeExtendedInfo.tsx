@@ -9,8 +9,8 @@ const EmployeeExtendedInfo: React.FunctionComponent<IEmployeeExtendedInfoProps> 
   const [interests, setInterests] = useState([]);
 
   const _getInterests = async () => {
-    const service = new GraphService(props.graphClient);
-    const _interests: string[] = await service.getEmployeeInterests(props.person.id);
+    // const service = new GraphService(props.graphService);
+    const _interests: string[] = await props.graphService.getEmployeeInterests(props.person.id);
     setInterests(_interests);
   };
  

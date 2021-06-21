@@ -1,0 +1,114 @@
+  .rankingCrown {
+    cursor: pointer;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 2;
+
+
+    .containerAvatar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      font-weight: bold;
+      font-family: "Open Sans", sans-serif;
+      letter-spacing: 2px;
+
+      .containerRankingCrownIcon {
+        border: 1px solid #833ab4;
+        border-radius: 50%;
+        padding: 1px;
+
+        svg {
+          position: relative;
+          top: 3px;
+        }
+
+        :global {
+          .ant-avatar {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            color: rgba(0,0,0,.85);
+            font-size: 14px;
+            font-variant: tabular-nums;
+            line-height: 1.5715;
+            list-style: none;
+            -webkit-font-feature-settings: "tnum";
+            font-feature-settings: "tnum","tnum";
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
+            background: #ccc;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            border-radius: 50%;
+        }
+        }
+
+        .rankingCrownIcon {
+          background: linear-gradient(
+            180deg,
+            rgba(85, 69, 150, 1) 0%,
+            rgba(200, 53, 126, 1) 50%,
+            rgba(218, 134, 61, 1) 100%
+          );
+          display: flex !important;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid;
+          transition: 0.3s;
+        
+          &:hover {
+            opacity: 0.8;
+            transform: scale(1.1);
+          }
+        }
+
+      }
+
+    }
+
+    .containerLetters {
+      display: flex;
+
+      span {
+        display: block;
+      }
+
+      .letter1 {
+        transform: translate(4px, -15px) rotate(60deg);
+      }
+    
+      .letter2 {
+        transform: translate(0px, -5px) rotate(45deg);
+      }
+    
+      .letter3 {
+        transform: translate(0px, 0px) rotate(15deg);
+      }
+    
+      .letter4 {
+        transform: translate(0px, 2px) rotate(0deg);
+      }
+    
+      .letter5 {
+        transform: translate(0px, 0px) rotate(-15deg);
+      }
+    
+      .letter6 {
+        transform: translate(0px, -5px) rotate(-45deg);
+      }
+    
+      .letter7 {
+        transform: translate(-4px, -16px) rotate(-60deg);
+      }
+    }  
+}

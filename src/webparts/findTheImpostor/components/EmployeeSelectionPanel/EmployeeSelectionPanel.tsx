@@ -21,11 +21,11 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
   const [remainingResults, setRemainingResults] = useState([]);
 
   const _getMembers = async (): Promise<void> => {
-    const service = new GraphService(props.graphClient);
-    let _members: Array<any> = await service.getGroupMembers(props.group.id);
-    _members = await service.appendRandomEmployees(_members, props.impostorsCount);
+    // const service = new GraphService(props.graphService);
+    let _members: Array<any> = await props.graphService.getGroupMembers(props.group.id);
+    _members = await props.graphService.appendRandomEmployees(_members, props.impostorsCount);
     
-    setMembers(service.shuffleUsers(_members));
+    setMembers(props.graphService.shuffleUsers(_members));
     setLoaded(true);
   };
 
@@ -53,8 +53,8 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
         break;
     }
 
-    const rankingService = new RankingService(props.graphClient);
-    rankingService.addPointsToCurrentUser(points);
+    // const rankingService = new RankingService(props.graphService, props.rankingService);
+    props.rankingService.addPointsToCurrentUser(points);
   };
 
   const process = async () => {
@@ -121,7 +121,7 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
         <div className={styles.employeeSelectionGrid}>
             {members.map(member => {
             return <EmployeeImpostorCard
-              graphClient={props.graphClient}
+              graphService={props.graphService}
               employee={member} 
               remainingImpostors={remainingImpostors}
               onCardClicked={cardClicked.bind(this)}

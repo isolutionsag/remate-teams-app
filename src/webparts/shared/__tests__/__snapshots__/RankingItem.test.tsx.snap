@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RankingItem should render properly 1`] = `
+<div
+  className="undefined"
+>
+  <div
+    className={undefined}
+  >
+    <span
+      className={undefined}
+    >
+      <i
+        aria-hidden={true}
+        className="root-37"
+        data-icon-name="MedalSolid"
+        style={
+          Object {
+            "color": "gold",
+          }
+        }
+      />
+    </span>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        xxx
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <p
+        style={
+          Object {
+            "flex": "1.1 1 0%",
+          }
+        }
+      >
+        <b>
+          Name:
+        </b>
+        <br />
+         
+        John Doe
+      </p>
+      <p>
+        <b>
+          Score:
+        </b>
+        <br />
+         
+        30
+      </p>
+      <p
+        style={
+          Object {
+            "flex": "1.2 1 0%",
+          }
+        }
+      >
+        <b>
+          Game(s) Played:
+        </b>
+        <br />
+         
+        2
+      </p>
+    </div>
+  </div>
+</div>
+`;

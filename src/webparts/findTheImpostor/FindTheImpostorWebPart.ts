@@ -6,6 +6,8 @@ import { MSGraphClient } from '@microsoft/sp-http';
 import FindTheImpostor from './components/FindTheImpostor/FindTheImpostor';
 import { IFindTheImpostorProps } from './components/FindTheImpostor/IFindTheImpostorProps';
 import { initializeIcons } from 'office-ui-fabric-react';
+import GraphService from 'services/GraphService';
+import RankingService from 'services/RankingService';
 
 export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
 
@@ -27,7 +29,8 @@ export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
     const element: React.ReactElement<IFindTheImpostorProps> = React.createElement(
       FindTheImpostor,
       {
-        graphClient: this.graphClient
+        graphService: new GraphService(this.graphClient),
+        rankingService: new RankingService(this.graphClient)
       }
     );
 

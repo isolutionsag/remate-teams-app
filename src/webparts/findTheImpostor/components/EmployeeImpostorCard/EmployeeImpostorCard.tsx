@@ -10,8 +10,8 @@ const EmployeeImpostorCard: React.FunctionComponent<IEmployeeImpostorCardProps> 
   const [voted, setVoted] = useState(false);
 
   const _getImage = async (): Promise<void> => {
-    const service = new GraphService(props.graphClient);
-    const photo = await service.getEmployeePhoto(props.employee.id);
+    // const service = new GraphService(props.graphService);
+    const photo = await props.graphService.getEmployeePhoto(props.employee.id);
     setImage(photo);
   };
 

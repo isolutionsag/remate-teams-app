@@ -25,10 +25,10 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
   const [loaded, setLoaded] = useState(false);
 
   const _getEmployees = async (): Promise<void> => {
-    const service = new GraphService(props.graphClient);
-    const randomEmployees: Array<IUserItem> = await service.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
+    // const service = new GraphService(props.graphService);
+    const randomEmployees: Array<IUserItem> = await props.graphService.getRandomEmployeesList(NUMBER_OF_EMPLOYEES);
 
-    const _shuffledEmployees = service.shuffleUsers(randomEmployees);
+    const _shuffledEmployees = props.graphService.shuffleUsers(randomEmployees);
 
     setShuffledUsers(_shuffledEmployees);
     setResults(randomEmployees.map(employee => { 
@@ -61,8 +61,8 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
         break;
     }
 
-    const rankingService = new RankingService(props.graphClient);
-    rankingService.addPointsToCurrentUser(points);
+    //const rankingService = new RankingService(props.graphService);
+    props.rankingService.addPointsToCurrentUser(points);
   };
 
   const validateResults = async () => {
@@ -142,7 +142,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
             return <EmployeeCard
               expanded={completed}
               result={result}
-              graphClient={props.graphClient}
+              graphService={props.graphService}
               person={result.employee}
               selectedEmployee={result.selectedEmployee}
               onUserDropped={(employee: IUserItem) => employeeDropped(employee, index)}
@@ -168,7 +168,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
 
       </>
       }
-      <Ranking graphClient={props.graphClient} />
+      <Ranking graphService={props.graphService} rankingService={props.rankingService} />
 
       <Dialog
         hidden={!showDialog}

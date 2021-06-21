@@ -1,8 +1,9 @@
 import { MSGraphClient } from '@microsoft/sp-http';
 import IGroupItem from 'data/IGroupItem';
 import IUserItem from 'data/IUserItem';
+import IGraphService from './IGraphService';
 
-export default class GraphService {
+export default class GraphService implements IGraphService {
 
     constructor(private client: MSGraphClient) {}
 
@@ -34,6 +35,7 @@ export default class GraphService {
             let apiResponse = await this.client
                 .api("users")
                 .version("v1.0")
+                .filter("accountEnabled eq true and userType eq 'member'")
                 .select("id,displayName,mail,jobTitle,officeLocation")
                 .get(); 
 
@@ -233,10 +235,18 @@ export default class GraphService {
             id: graphResult.id,
             displayName: graphResult.displayName,
             mail: graphResult.mail,
-            initials: graphResult.displayName.match(/\b(\w)/g).join('').substr(0, 2),
+            initials: this.getInitials(graphResult.displayName),
             jobTitle: graphResult.jobTitle,
             officeLocation: graphResult.officeLocation
         };
+    }
+
+    private getInitials(displayName: string): string {
+        try {
+            return displayName.match(/\b(\w)/g).join('').substr(0, 2);
+        } catch {
+            return "??";
+        }
     }
     
 }
