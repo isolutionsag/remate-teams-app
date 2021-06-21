@@ -1,7 +1,8 @@
 import { MSGraphClient } from '@microsoft/sp-http';
 import IRankingItem from 'data/IRankingItem';
+import IRankingService from './IRankingService';
 
-export default class RankingService {
+export default class RankingService implements IRankingService {
     constructor(private client: MSGraphClient) {}
 
     public async getFullRanking(): Promise<Array<IRankingItem>> {
@@ -10,6 +11,7 @@ export default class RankingService {
             .api("users")
             .version("v1.0")
             .select("Id,mail,displayName,jobTitle")
+            .filter("accountEnabled eq true and userType eq 'member'")
             .expand("extensions($filter=id eq 'com.onmicrosoft.isdmartos.remateData')")
             .get();
 
@@ -42,7 +44,7 @@ export default class RankingService {
                         displayName: user.displayName,
                         mail: user.mail,
                         jobTitle: user.jobTitle,
-                        initials: user.displayName.match(/\b(\w)/g).join('').substr(0, 2)                  
+                        initials: this.getInitials(user.displayName)                  
                     }
                 };
             })
@@ -63,6 +65,14 @@ export default class RankingService {
             await this.updateRankingForCurrentUser(res, points);
         } else {
             await this.createRankingForCurrentUser(points);
+        }
+    }
+
+    private getInitials(displayName: string): string {
+        try {
+            return displayName.match(/\b(\w)/g).join('').substr(0, 2);
+        } catch {
+            return "??";
         }
     }
 
