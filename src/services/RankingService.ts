@@ -10,7 +10,7 @@ export default class RankingService implements IRankingService {
         let res = await this.client
             .api("users")
             .version("v1.0")
-            .select("Id,mail,displayName,jobTitle")
+            .select("Id,mail,displayName,jobTitle,assignedLicenses")
             .filter("accountEnabled eq true and userType eq 'member'")
             .expand("extensions($filter=id eq 'com.onmicrosoft.isdmartos.remateData')")
             .get();
@@ -27,6 +27,7 @@ export default class RankingService implements IRankingService {
         }
 
         const rankedUsers: Array<IRankingItem> = result
+            .filter(x => x.assignedLicenses.length > 0)
             .map(user => {
                 let points: number = 0;
                 let attempts: number = 0;

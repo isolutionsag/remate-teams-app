@@ -49,6 +49,8 @@ export default class GraphService implements IGraphService {
                 apiResponse = await this.client.api(apiResponse["@odata.nextLink"]).get();
                 result = result.concat(apiResponse.value);
             }
+
+            result = result.filter(x => x.assignedLicenses.length > 0);
             
             let itemsToReturn: number = Math.min(count, result.length);
 
