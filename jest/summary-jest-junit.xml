@@ -1,2 +1,22 @@
-<testsuites name="jest tests" tests="0" failures="0" time="7.532">
+<testsuites name="jest tests" tests="7" failures="0" time="6.642">
+  <testsuite name="DraggableName" errors="0" failures="0" skipped="0" timestamp="2021-06-21T14:08:55" time="4.731" tests="4">
+    <testcase classname="DraggableName should render properly" name="DraggableName should render properly" time="0.016">
+    </testcase>
+    <testcase classname="DraggableName should render the user display name" name="DraggableName should render the user display name" time="0.002">
+    </testcase>
+    <testcase classname="DraggableName should not allow user to drag when blocked" name="DraggableName should not allow user to drag when blocked" time="0.003">
+    </testcase>
+    <testcase classname="DraggableName should allow user to drag when not blocked" name="DraggableName should allow user to drag when not blocked" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="RankingItem" errors="0" failures="0" skipped="0" timestamp="2021-06-21T14:08:55" time="4.752" tests="2">
+    <testcase classname="RankingItem should render properly" name="RankingItem should render properly" time="0.016">
+    </testcase>
+    <testcase classname="RankingItem should render the user display name" name="RankingItem should render the user display name" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="Ranking" errors="0" failures="0" skipped="0" timestamp="2021-06-21T14:08:55" time="4.791" tests="1">
+    <testcase classname="Ranking should render properly" name="Ranking should render properly" time="0.024">
+    </testcase>
+  </testsuite>
 </testsuites>

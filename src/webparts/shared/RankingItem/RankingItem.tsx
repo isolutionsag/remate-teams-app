@@ -14,7 +14,9 @@ export const RankingItem: React.FunctionComponent<IRankingItemProps> = props => 
   };
 
   useEffect(() => {
-    //_getImage();
+    if (props.position < 4 || props.isCurrentUser) {
+      _getImage();
+    }
   }, []);
 
   const getMetalColor = (position: number): string => {

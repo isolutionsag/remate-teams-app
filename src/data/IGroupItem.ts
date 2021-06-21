@@ -1,4 +1,4 @@
 export default interface IGroupItem {
   id: string;
-  mailNickname: string;
+  displayName: string;
 }

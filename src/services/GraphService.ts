@@ -115,7 +115,7 @@ export default class GraphService implements IGraphService {
             const apiResponse: any = await this.client
                 .api("groups")
                 .version("v1.0")
-                .select("id,mailNickname")
+                .select("id,displayName")
                 .get(); 
 
             if (!apiResponse) {
@@ -125,7 +125,7 @@ export default class GraphService implements IGraphService {
             const result: Array<IGroupItem> = apiResponse.value.map(group => {
                 return {
                     id: group.id,
-                    mailNickname: group.mailNickname
+                    mailNickname: group.displayName
                 };
             });
 

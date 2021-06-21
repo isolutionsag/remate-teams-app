@@ -2,11 +2,10 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import styles from './EmployeeSelectionPanel.module.scss';
 import IEmployeeSelectionPanelProps from './IEmployeeSelectionPanelProps';
-import GraphService from 'services/GraphService';
 import EmployeeImpostorCard from '../EmployeeImpostorCard/EmployeeImpostorCard';
 import { DefaultButton, Dialog, DialogType, Icon, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import IUserItem from 'data/IUserItem';
-import RankingService from 'services/RankingService';
+
 
 
 const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelProps> = props => {
@@ -21,7 +20,6 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
   const [remainingResults, setRemainingResults] = useState([]);
 
   const _getMembers = async (): Promise<void> => {
-    // const service = new GraphService(props.graphService);
     let _members: Array<any> = await props.graphService.getGroupMembers(props.group.id);
     _members = await props.graphService.appendRandomEmployees(_members, props.impostorsCount);
     
@@ -112,7 +110,7 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
       :
       <>
         <p>Select the crew members you suspect are the impostors for
-          the group: <strong>{props.group.mailNickname}</strong>
+          the group: <strong>{props.group.displayName}</strong>
         </p>
         <div className={styles.counters}>
           <p>Remaining impostors: {remainingImpostors}</p>
