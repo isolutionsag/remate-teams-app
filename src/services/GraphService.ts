@@ -115,15 +115,19 @@ export default class GraphService implements IGraphService {
         try {
             const apiResponse: any = await this.client
                 .api("groups")
+                .filter("mailEnabled eq true")
                 .version("v1.0")
-                .select("id,displayName")
+                .select("id,displayName,mailEnabled")
                 .get(); 
 
             if (!apiResponse) {
                 return Promise.reject("No results have been fetched");
             }
 
-            const result: Array<IGroupItem> = apiResponse.value.map(group => {
+            const result: Array<IGroupItem> = apiResponse.value
+                .filter(group => group.mailEnabled === true)
+                .sort((a,b) => {return a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1 : -1 })
+                .map(group => {
                 return {
                     id: group.id,
                     mailNickname: group.displayName
@@ -143,6 +147,7 @@ export default class GraphService implements IGraphService {
             const apiResponse: any = await this.client
                 .api(`groups/${groupId}/members`)
                 .version("v1.0")
+                .top(20)
                 .select("id,displayName,mail,jobTitle")
                 .get(); 
 
