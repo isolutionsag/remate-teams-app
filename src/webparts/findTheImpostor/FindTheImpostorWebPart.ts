@@ -13,7 +13,20 @@ export default class FaceMatcherWebPart extends BaseClientSideWebPart<{}> {
 
   private graphClient: MSGraphClient;
 
+  private _applyTheme = (theme: string): void => {
+    this.context.domElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+  }
+
   public onInit(): Promise<void> {
+
+    if (this.context.sdks.microsoftTeams) { 
+      // checking that we're in Teams
+      const context = this.context.sdks.microsoftTeams!.context;
+      this._applyTheme(context.theme || 'default');
+      this.context.sdks.microsoftTeams.teamsJs.registerOnThemeChangeHandler(this._applyTheme);
+    }
+    
     initializeIcons();
     return new Promise<void>((resolve: () => void, reject: (error: any) => void): void => {
       this.context.msGraphClientFactory

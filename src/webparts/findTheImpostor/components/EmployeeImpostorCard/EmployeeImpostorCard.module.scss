@@ -1,3 +1,5 @@
+@import "../../../../common/colors.module";
+
 .employeeImpostorCard, .employeeBlockedCard {
     padding: 2px;
     background: linear-gradient(to bottom right,#554596,#c8357e,#de9630);
@@ -10,7 +12,7 @@
         display: grid;
         height: 100%;
         text-align: center;
-        background-color: #fff;
+        background-color: "[theme:white, default:#fff]";
         border-radius: 6px;
         font-size: 14pt;
 
@@ -75,5 +77,29 @@
 
     .votedOverlay {
         display: none;
+    }
+}
+
+[data-theme='default'] {
+    .employeeImpostorCard, .employeeBlockedCard {
+        .container {
+            background: $default-firstComponent-background;
+        }
+    }
+}
+
+[data-theme='dark'] {
+    .employeeImpostorCard, .employeeBlockedCard {
+        .container {
+            background: $dark-firstComponent-background;
+        }
+    }
+}
+
+[data-theme='contrast'] {
+    .employeeImpostorCard, .employeeBlockedCard {
+        .container {
+            background: $contrast-firstComponent-background;
+        }
     }
 }

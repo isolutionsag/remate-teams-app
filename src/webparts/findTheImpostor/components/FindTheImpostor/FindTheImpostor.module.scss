@@ -1,18 +1,6 @@
 
-:global {
-  div#workbenchPageContent {   // for workbench testing
-    max-width: 100%;
-    border: 0;
-    left: 5px;
-    right: 5px;
-
-    .CanvasZone {
-      max-width: 100%;
-      padding: 0 24px;
-      margin: auto;
-    }
-  }
-}
+@import "../../../../common/colors.module";
+@import "../../../../common/globals.module";
 
 .findTheImpostor {
   font-family: "Segoe UI",system-ui,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
@@ -20,7 +8,12 @@
   margin: auto;
   padding: 20px;
 
+  button {
+    padding: 25px 20px;
+  }
+
   p {
+    color: "[theme:primaryText, default:#333]";
     line-height: 40px;
     font-size: 17px;
     font-weight: 500;
@@ -33,7 +26,7 @@
     p {
       width: 100px;
       height: 100px;
-      background-color: #333;
+      background-color: "[theme:primaryText, default:#333]";
       display: grid;
       align-items: center;
       text-align: center;
@@ -41,7 +34,7 @@
       cursor: pointer;
       border-radius: 50%;
       font-size: 45px;
-      color: #fff;
+      color: "[theme:white, default:#fff]";
 
       &:hover {
         transform: scale(1.05);
@@ -59,4 +52,56 @@
       margin: 0 auto
     }
   }
+}
+
+[data-theme='default'] {
+
+  .findTheImpostor {
+    p {
+      color: $default-firstComponent-color;
+    }
+
+    .numberOfImpostorSelector {
+      p {
+        background-color: $default-firstComponent-color;
+        color: $default-firstComponent-background;
+      }
+    }
+  }
+
+}
+
+[data-theme='dark'] {
+
+  .findTheImpostor {
+    p {
+      color: $dark-firstComponent-color;
+      
+      .numberOfImpostorSelector {
+        p {
+          background-color: $dark-firstComponent-color;
+          color: $dark-firstComponent-background;
+        }
+      }
+    }
+  }
+  
+}
+
+[data-theme='contrast'] {
+
+  .findTheImpostor {
+    p {
+      color: $contrast-firstComponent-color;
+    }
+
+    .numberOfImpostorSelector {
+      p {
+        background-color: $dark-firstComponent-color;
+        color: $dark-firstComponent-background;
+      }
+
+    }
+  }
+  
 }

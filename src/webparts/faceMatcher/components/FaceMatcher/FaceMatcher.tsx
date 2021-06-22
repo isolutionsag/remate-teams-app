@@ -124,7 +124,7 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
       <>
         <div className={styles.namesOuterContainer}>
           <div className={styles.namesInnerContainer}>
-            <div className={styles.xxx}>
+            <div className={styles.namesInnerGrid}>
               <h3>Remate's Names</h3>
               <p>Drag the names from here:</p>
               <div className={styles.dragDropArea}>
@@ -152,18 +152,20 @@ const FaceMatcher: React.FunctionComponent<IFaceMatcherProps> = props => {
         </div>
 
         <div className={styles.buttons}>
+          {!completed && assignedEmployees.length === NUMBER_OF_EMPLOYEES &&
           <PrimaryButton
             iconProps={{ iconName: 'SkypeCheck' }}
             text='Confirm'
-            disabled={assignedEmployees.length !== NUMBER_OF_EMPLOYEES || completed}
+            // disabled={assignedEmployees.length !== NUMBER_OF_EMPLOYEES || completed}
             onClick={validateResults.bind(this)}
-          />
-          <DefaultButton
+          />}
+          {completed &&
+          <PrimaryButton
             iconProps={{ iconName: 'Sync' }}
             text='Play Again'
-            disabled={!completed}
+            // disabled={!completed}
             onClick={reset.bind(this)}
-          />
+          />}
         </div>
 
       </>

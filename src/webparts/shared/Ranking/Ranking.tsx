@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IRankingProps } from './IRankingProps';
 import styles from './Ranking.module.scss';
-import { DefaultButton, Dialog, DialogType, Icon } from 'office-ui-fabric-react';
+import { DefaultButton, Dialog, DialogType, Icon, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import { useEffect, useState } from 'react';
 import IRankingItem from 'data/IRankingItem';
 import RankingItem from '../RankingItem/RankingItem';
@@ -15,6 +15,7 @@ const Ranking: React.FunctionComponent<IRankingProps> = props => {
   const [winners, setWinners] = useState([]);
   const [relativeToUser, setRelativeToUser] = useState([]);
   const [showRanking, setShowRanking] = useState(false);
+  const [rankingLoaded, setRankingLoaded] = useState(false);
   const [showFullRanking, setShowFullRanking] = useState(false);
 
   const _getCurrentUser = async (): Promise<void> => {
@@ -29,6 +30,8 @@ const Ranking: React.FunctionComponent<IRankingProps> = props => {
 
   const _showRanking = async (): Promise<void> => {
 
+    setShowRanking(true);
+
     const fullRanking: Array<IRankingItem> = await props.rankingService.getFullRanking();
     const currentUserPosition: number = fullRanking.map(ranking => ranking.user.id).indexOf(currentUser.id) + 1;
 
@@ -39,8 +42,9 @@ const Ranking: React.FunctionComponent<IRankingProps> = props => {
       setRelativeToUser(fullRanking.slice(currentUserPosition - 2, currentUserPosition + 1));
     }
 
+    setRankingLoaded(true);
     setRankedUsers(fullRanking);
-    setShowRanking(true);
+ 
   };
 
   return (
@@ -60,7 +64,12 @@ const Ranking: React.FunctionComponent<IRankingProps> = props => {
         }}>
         <div className={styles.dialogContainer}>
 
-          {showFullRanking ?
+
+          {!rankingLoaded ?
+          <Spinner size={SpinnerSize.large} label='Loading ranking...' />
+          :
+          
+          showFullRanking ?
 
             rankedUsers.map((ranking: IRankingItem, index: number) => {
 

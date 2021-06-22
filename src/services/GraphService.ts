@@ -36,7 +36,7 @@ export default class GraphService implements IGraphService {
                 .api("users")
                 .version("v1.0")
                 .filter("accountEnabled eq true and userType eq 'member'")
-                .select("id,displayName,mail,jobTitle,officeLocation")
+                .select("id,displayName,mail,jobTitle,officeLocation,assignedLicenses")
                 .get(); 
 
             if (!apiResponse) {
@@ -49,8 +49,7 @@ export default class GraphService implements IGraphService {
                 apiResponse = await this.client.api(apiResponse["@odata.nextLink"]).get();
                 result = result.concat(apiResponse.value);
             }
-
-            result = result.filter(x => x.assignedLicenses.length > 0);
+            result = result.filter(x => x.assignedLicenses && x.assignedLicenses.length > 0);
             
             let itemsToReturn: number = Math.min(count, result.length);
 
@@ -182,7 +181,7 @@ export default class GraphService implements IGraphService {
             const unexistingEmployees = this.getUnexistingEmployees(groupMembers, allEmployees);
 
             if (unexistingEmployees.length < numberToAdd) {
-                Promise.reject("Can't play with this group.");
+                Promise.reject("There are not enough employees outside the selected group to play the game.");
             }
 
             let result: any[] = unexistingEmployees.slice();
@@ -210,16 +209,21 @@ export default class GraphService implements IGraphService {
     }
 
     public shuffleUsers(users: Array<IUserItem>): Array<IUserItem> {
-        const shuffledUsers = users.slice();
+        if (users) {
+            const shuffledUsers = users.slice();
     
-        for (let i: number = shuffledUsers.length - 1; i > 0; i--) {
-          const j: number = Math.floor(Math.random() * (i + 1));
-          const temp: IUserItem = shuffledUsers[i];
-          shuffledUsers[i] = shuffledUsers[j];
-          shuffledUsers[j] = temp;
+            for (let i: number = shuffledUsers.length - 1; i > 0; i--) {
+              const j: number = Math.floor(Math.random() * (i + 1));
+              const temp: IUserItem = shuffledUsers[i];
+              shuffledUsers[i] = shuffledUsers[j];
+              shuffledUsers[j] = temp;
+            }
+
+            return shuffledUsers;    
         }
+
+        return [];
     
-        return shuffledUsers;
       }
 
     private getUnexistingEmployees(groupMembers: Array<IUserItem>, allEmployees: Array<any>): Array<any> {

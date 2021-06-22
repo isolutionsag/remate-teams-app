@@ -1,3 +1,5 @@
+@import "../../../../common/colors.module";
+
 .employeeCard {
         padding: 2px;
         background: linear-gradient(to bottom right,#554596,#c8357e,#de9630);
@@ -10,7 +12,7 @@
         padding: 10px;
         border-radius: 4px;
         flex-direction: column;
-        background: #f0f2f5;
+        background: "[theme:white, default:#fff]";
         justify-content: space-between;
 
         .userPicture {
@@ -25,7 +27,7 @@
             line-height: 150px;
             text-align: center;
             background-color: #b84c8d;
-            color: #fff;
+            color: "[theme:white, default:#fff]";
         }
 
         p {
@@ -37,7 +39,7 @@
             border: 1px solid #b84c8d;
             border-radius: 4px;
             min-height: 61px;
-            background: #fff;
+            background: "[theme:white, default:#fff]";
         }
     
 }
@@ -45,4 +47,40 @@
     
 
 
+}
+
+[data-theme='default'] {
+    .employeeCard {
+        .container {
+            background: $default-firstComponent-background;
+
+            .dropZone {
+                background: $default-firstComponent-background;
+            }
+        }
+    }
+}
+
+[data-theme='dark'] {
+    .employeeCard {
+        .container {
+            background: $dark-firstComponent-background;
+
+            .dropZone {
+                background: $dark-firstComponent-background;
+            }
+        }
+    }
+}
+
+[data-theme='contrast'] {
+    .employeeCard {
+        .container {
+            background: $contrast-firstComponent-background;
+
+            .dropZone {
+                background: $contrast-firstComponent-background;
+            }
+        }
+    }
 }

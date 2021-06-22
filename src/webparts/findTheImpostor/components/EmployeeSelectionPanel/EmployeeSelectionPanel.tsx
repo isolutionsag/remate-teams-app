@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import styles from './EmployeeSelectionPanel.module.scss';
 import IEmployeeSelectionPanelProps from './IEmployeeSelectionPanelProps';
 import EmployeeImpostorCard from '../EmployeeImpostorCard/EmployeeImpostorCard';
-import { DefaultButton, Dialog, DialogType, Icon, Spinner, SpinnerSize } from 'office-ui-fabric-react';
+import { Dialog, DialogType, Icon, PrimaryButton, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import IUserItem from 'data/IUserItem';
 
 
@@ -18,13 +18,18 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
   const [completed, setCompleted] = useState(false);
   const [results, setResults] = useState([]);
   const [remainingResults, setRemainingResults] = useState([]);
+  const [error, setError] = useState(false);
 
-  const _getMembers = async (): Promise<void> => {
-    let _members: Array<any> = await props.graphService.getGroupMembers(props.group.id);
-    _members = await props.graphService.appendRandomEmployees(_members, props.impostorsCount);
-    
-    setMembers(props.graphService.shuffleUsers(_members));
-    setLoaded(true);
+  const _getMembers = async () => {
+      let _members: Array<any> = await props.graphService.getGroupMembers(props.group.id);
+      _members = await props.graphService.appendRandomEmployees(_members, props.impostorsCount);
+      
+      if (_members) {
+        setMembers(props.graphService.shuffleUsers(_members));
+        setLoaded(true);    
+      } else {
+        setError(true);
+      }
   };
 
   useEffect(() => {
@@ -103,8 +108,21 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
     <div className={styles.employeeSelectionPanel}>
       
       {completed ?
-      <DefaultButton text='Click here to play again' onClick={() => window.location.reload()} />
+      <PrimaryButton
+        iconProps={{iconName: 'Sync'}} 
+        text='Click here to play again' 
+        onClick={() => window.location.reload()} />
       :
+      error ?
+      <>
+        <p>There are not enough employees outside the selected group to play the game.</p>
+        <PrimaryButton
+        iconProps={{iconName: 'Sync'}} 
+        text='Click here to play again' 
+        onClick={() => window.location.reload()} />
+      </>
+      :
+
       !loaded ? 
       <Spinner size={SpinnerSize.large} label='Loading groups...' />
       :
@@ -127,10 +145,12 @@ const EmployeeSelectionPanel: React.FunctionComponent<IEmployeeSelectionPanelPro
             })}
         </div>
 
-        <DefaultButton
+        {remainingImpostors == 0 &&
+        <PrimaryButton
+          iconProps={{iconName: 'SkypeCheck'}}
           text='Process' 
-          disabled={remainingImpostors > 0}
-          onClick={process.bind(this)} />
+          // disabled={remainingImpostors > 0}
+          onClick={process.bind(this)} />}
 
       </>
       }

@@ -1,3 +1,5 @@
+@import "../../../../common/colors.module";
+
 .employeeExtendedInfo {
     text-align: center;
     margin-top: 20px;
@@ -18,7 +20,7 @@
         flex-direction: column;
         padding: 12px;
         border-radius: 2px;
-        background-color: #fff;
+        background-color:  "[theme:white, default:#fff]";
         font-size: 12px;
         height: 220px;
         word-break: break-all;
@@ -43,6 +45,43 @@
             font-size: 12pt;
             font-size: 8pt;
             line-height: 0px;
+        }
+    }
+}
+
+[data-theme='default'] {
+    .employeeExtendedInfo {
+
+        .downArrow {
+            color: $default-firstComponent-background;
+        }
+
+        .additionalInfo {
+            background: $default-firstComponent-background;
+        }
+    }
+}
+
+[data-theme='dark'] {
+    .employeeExtendedInfo {
+        .downArrow {
+            color: $dark-firstComponent-background;
+        }
+
+        .additionalInfo {
+            background: $dark-firstComponent-background;
+        }
+    }
+}
+
+[data-theme='contrast'] {
+    .employeeExtendedInfo {
+        .downArrow {
+            color: $contrast-firstComponent-background;
+        }
+
+        .additionalInfo {
+            background: $contrast-firstComponent-background;
         }
     }
 }

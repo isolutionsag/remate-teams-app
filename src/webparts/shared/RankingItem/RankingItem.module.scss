@@ -1,4 +1,6 @@
 
+@import "../../../common/colors.module";
+
 .rankingMeContainer {
   background: linear-gradient(to bottom right,#554596,#c8357e,#de9630);
   border-radius: 2px;
@@ -13,11 +15,11 @@
     border-radius: 2px;
     // padding: .5rem;
     margin: .5rem 0;
-    background-color: #fff;
+    background-color: "[theme:white, default:#fff]";
     transition: .3s;
 
     .innerContainer {
-      background-color: #fff;
+      background-color: "[theme:white, default:#fff]";
       display: flex;
       width: 100%;
       padding: 5px;
@@ -66,4 +68,36 @@
         flex: 1 1;
       }
     }
+}
+
+[data-theme='default'] {
+  .rankingUserContainer, .rankingMeContainer {
+    background: $default-firstComponent-background;
+
+    .innerContainer {
+      background: $default-firstComponent-background;      
+    }
+  }
+}
+
+[data-theme='dark'] {
+  .rankingUserContainer, .rankingMeContainer {
+    background: $dark-firstComponent-background;
+
+    .innerContainer {
+      background: $dark-firstComponent-background;      
+    }
+
+  }
+}
+
+[data-theme='contrast'] {
+  .rankingUserContainer, .rankingMeContainer {
+    background: $contrast-firstComponent-background;
+
+    .innerContainer {
+      background: $contrast-firstComponent-background;      
+    }
+
+  }
 }

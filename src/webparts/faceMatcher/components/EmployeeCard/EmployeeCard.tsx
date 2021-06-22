@@ -37,7 +37,7 @@ const EmployeeCard: React.FunctionComponent<IEmployeeCardProps> = props => {
       return;
     }
 
-    event.target.style.backgroundColor = "white";
+    event.target.style.backgroundColor = "";
   };
 
   const dropEmployeeName = (event: any): void => {
@@ -45,7 +45,7 @@ const EmployeeCard: React.FunctionComponent<IEmployeeCardProps> = props => {
       return;
     }
 
-    event.target.style.backgroundColor = "white";
+    event.target.style.backgroundColor = "";
 
     const employee = JSON.parse(event.dataTransfer.getData("employee"));
 
@@ -60,6 +60,7 @@ const EmployeeCard: React.FunctionComponent<IEmployeeCardProps> = props => {
     }
 
     if (!props.validated) {
+      return "";
       return '#f0f2f5';
     }
 

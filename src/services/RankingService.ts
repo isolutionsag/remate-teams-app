@@ -27,7 +27,7 @@ export default class RankingService implements IRankingService {
         }
 
         const rankedUsers: Array<IRankingItem> = result
-            .filter(x => x.assignedLicenses.length > 0)
+            .filter(x => x.assignedLicenses && x.assignedLicenses.length > 0)
             .map(user => {
                 let points: number = 0;
                 let attempts: number = 0;

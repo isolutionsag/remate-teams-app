@@ -1,18 +1,5 @@
-
-:global {
-  div#workbenchPageContent {   // for workbench testing
-    max-width: 100%;
-    border: 0;
-    left: 5px;
-    right: 5px;
-
-    .CanvasZone {
-      max-width: 100%;
-      padding: 0 24px;
-      margin: auto;
-    }
-  }
-}
+@import "../../../../common/colors.module";
+@import "../../../../common/globals.module";
 
 .faceMatcher {
 
@@ -23,7 +10,8 @@
 
   .button {
     display: inline-block;
-    background: #eee;
+    color: "[theme:white, default:#fff]";
+    background: "[theme:themePrimary, default:#0078d4]";
     padding: 5px 15px;
     margin: 0 10px;
 
@@ -34,6 +22,7 @@
   }
 
   p {
+    color: "[theme:primaryText, default:#333]";
     line-height: 40px;
     text-align: justify;
     font-size: 17px;
@@ -56,10 +45,10 @@
     .namesInnerContainer {
       display: flex;
       padding: 10px;
-      background: #f0f2f5;
+      background: "[theme:white, default:#fff]";
       border-radius: 4px;
 
-      .xxx {
+      .namesInnerGrid {
 
         display: grid;
         grid-column-gap: auto;
@@ -126,6 +115,7 @@
 
     button {
       margin-right: 20px;
+      padding: 25px 20px;
     }
   }
 }
@@ -133,4 +123,84 @@
 .popupContent {
   font-size: 20px;
   text-align: center;
+}
+
+[data-theme='default'] {
+
+  .faceMatcher {
+    p {
+      color: $default-firstComponent-color;
+    }
+
+    .button {
+      background-color: $default-firstComponentButton-background;
+      color: $default-firstComponentButton-color;
+    }
+
+    .namesOuterContainer {
+     
+      .namesInnerContainer {
+        background: $default-firstComponent-background;
+
+        .dragDropArea {
+          background: $default-firstComponent-background;
+        }
+      }
+    }
+  }
+}
+
+[data-theme='dark'] {
+
+  .faceMatcher {
+
+    p {
+      color: $dark-firstComponent-color;
+
+    }
+
+    .button {
+      background-color: $dark-firstComponentButton-background;
+      color: $dark-firstComponent-color;
+    }
+
+    .namesOuterContainer {
+     
+      .namesInnerContainer {
+        background: $dark-firstComponent-background;
+
+        .dragDropArea {
+          background: $dark-firstComponent-background;
+        }
+      }
+    }
+  }
+
+}
+
+[data-theme='contrast'] {
+
+  .faceMatcher {
+    p {
+      color: $contrast-firstComponent-color;
+
+    }
+
+    .button {
+      background-color: $contrast-firstComponentButton-background;
+      color: $contrast-firstComponentButton-color;
+    }
+
+    .namesOuterContainer {
+     
+      .namesInnerContainer {
+        background: $contrast-firstComponent-background;
+
+        .dragDropArea {
+          background: $contrast-firstComponent-background;
+        }
+      }
+    }
+  }
+
 }

@@ -14,7 +14,7 @@ describe('DraggableName', () => {
 
   beforeEach(() => {
     
-  })
+  });
 
   it('should render properly', () => {
    

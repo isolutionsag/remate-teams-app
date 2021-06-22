@@ -31,7 +31,7 @@ describe('RankingItem', () => {
 
   beforeEach(() => {
     
-  })
+  });
 
   it('should render properly', () => {
     const graphService = new GraphServiceFake();
