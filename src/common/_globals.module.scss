@@ -14,6 +14,15 @@
             margin: auto;
         }
     }
+
+    .ms-SPLegacyFabricBlock {
+        overflow-y: auto!important;
+    }
+
+    // .spAppAndPropertyPanelContainer, .sp-appBar-parent-mobile { 
+    //     overflow-x: hidden !important;
+    //     overflow-y: scroll !important;
+    //   }
 }
 
 [data-theme="default"] {

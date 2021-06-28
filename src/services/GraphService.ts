@@ -126,7 +126,7 @@ export default class GraphService implements IGraphService {
 
             const result: Array<IGroupItem> = apiResponse.value
                 .filter(group => group.mailEnabled === true)
-                .sort((a,b) => {return a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1 : -1 })
+                .sort((a,b) => { return a.displayName.toLowerCase() > b.displayName.toLowerCase() ? 1 : -1; } )
                 .map(group => {
                 return {
                     id: group.id,
